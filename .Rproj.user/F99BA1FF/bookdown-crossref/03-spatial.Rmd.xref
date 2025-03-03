@@ -1,0 +1,31 @@
+h1:spatial Spatial Econometrics
+h2:dimensions Dimensions
+h2:introduction-to-coordinates Introduction to Coordinates
+h3:polar-and-cartesian-coordinates Polar and cartesian coordinates
+fig:polcar Polar and Cartesian Coordinates
+h3:spherical-coordinates Spherical coordinates
+h3:note Note
+h2:plotting-shapes Plotting shapes
+h2:spatial-effects Spatial effects
+h3:spatial-dependence Spatial dependence
+h2:exploratory-spacial-data-analysis-esda Exploratory Spacial Data Analysis (ESDA)
+h3:spacial-autocorrelation Spacial autocorrelation
+h4:morans-i Moran’s I
+h4:gearys-c Geary’s C
+h3:assumptions Assumptions
+h2:how-to-start How to start?
+h3:ols OLS
+h3:spatially-lagged-x-slx Spatially Lagged X (SLX)
+h3:spatial-lag-model-sar-slm Spatial Lag Model (SAR) (SLM)
+h3:spatial-error-model-sem Spatial Error Model (SEM)
+h4:spatial-hausman-test Spatial Hausman test
+h3:spatial-durbin-model-sdm Spatial Durbin Model (SDM)
+h3:spatial-durbin-error-model-sdem Spatial Durbin Error Model (SDEM)
+h3:manski-model Manski model
+h3:sarar-model-kelejian-prucha-sac-cliff-ord SARAR model (Kelejian-Prucha) (SAC) (Cliff-Ord)
+h2:which-model-is-the-best Which model is the best?
+h3:for-global For Global
+h3:for-local For Local
+h3:other Other
+h2:heteroskedasticity Heteroskedasticity
+

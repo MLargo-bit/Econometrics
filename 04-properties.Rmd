@@ -1,0 +1,32 @@
+# Math Review
+
+This chapter contains some important properties that can be forgotten.
+
+
+## Summation {-}
+
+For a sequence of $n$ numbers $\left\{x_i:i=1,...,n\right\}$:
+
+$$\sum_{i=1}^nx_i \equiv x_1+x_2+...+x_n$$
+
+### Property 1 {-}
+
+For any constant $c$,
+
+$$\sum_{i=1}^nc=nc$$
+
+### Property 2 {-}
+
+For any constant $c$,
+
+$$\sum_{i=1}^ncx_i=c\sum_{i=1}^nx_i$$
+
+### Property 3 {-}
+
+For a set of $n$ pair of numbers $\left\{(x_i,y_i):i=1,2...,n\right\}$ and constants $a$ and $b$:
+
+$$\sum_{i=1}^n(ax_i+by_i)=a\sum_{i=1}^nx_i+b\sum_{i=1}^ny_i$$
+
+$$\sum_{i=1}^n(x_i/y_i)\neq \left(\sum_{i=1}^nx_i \right) / \left(\sum_{i=1}^ny_i \right)$$
+
+

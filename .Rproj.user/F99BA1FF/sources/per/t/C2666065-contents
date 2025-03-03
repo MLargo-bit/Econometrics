@@ -1,0 +1,62 @@
+# Cross-Sectional Data {#crossec}
+
+## Simple Regression Model {-}
+
+It studies the relationship between two variables. the idea is to study how one changes in terms of the other. A `r ifelse(knitr::is_html_output(), print("<key>simple linear regression model</key>"), print("\\key{simple linear regression model}"))` can be written as [@wooldridge1996introductory]:
+
+\begin{equation}
+y=\beta_0+\beta_1x+u
+(\#eq:simpreg)
+\end{equation} 
+
+$y$ is called the `r ifelse(knitr::is_html_output(), print("<key>dependent variable</key>"), print("\\key{dependent variable}"))`; $x$ is called the `r ifelse(knitr::is_html_output(), print("<key>independent variable</key>"), print("\\key{independent variable}"))`  or regressor. Be careful! The notion of independent here is not the same as in statistics between two random variables. 
+
+$u$ is called the `r ifelse(knitr::is_html_output(), print("<key>error term</key>"), print("\\key{error term}"))`. It represents other factors that affect $y$ other than $x$, meaning they will be unobserved. 
+
+Taking differentials on Equation \@ref(eq:simpreg), we get:
+
+$$\Delta y=\beta_1\Delta x$$
+if $\Delta u=0$, that means other factors different than $x$ are constant. The above equation can be interpreted that the changes in $y$ ($\Delta y$) is the product of the slope, $\beta_1$ and the changes in $x$ ($\Delta x$). This slope determines the relationship between the variables and it is the main interest. $\beta_0$ is the intercept.
+
+Given that Equation \@ref(eq:simpreg) establishes a linear relationship between the variables, if $x$ changes in one unit, the effect in $y$ is going to be constant  and equal to $\beta_1$. 
+
+The `r ifelse(knitr::is_html_output(), print("<key>correlation coefficient</key>"), print("\\key{correlation coefficient}"))` is a way to identify if two variables are *linearly related*. However, if $x$ and $y$ are uncorrelated, still one of them can be correlated with a function of the other. For example, $y$ can be correlated with $x^3$. When the error term $u$ is correlated with $x$ or any function of $x$, the derived models would have interpretative problems and statistical inference won't be possible. Instead of $Corr(x,u)=0$, it is better to assume Equation \@ref(eq:assump1):
+
+\begin{equation}
+E(u|x)=E(u)
+(\#eq:assump1)
+\end{equation} 
+
+Equation \@ref(eq:assump1) means $u$ is `r ifelse(knitr::is_html_output(), print("<key>mean independent</key>"), print("\\key{mean independent}"))` of $x$. This also implies full independence between $u$ and $x$. The unobserved variables ($u$) are not related with the independent variables ($x$). The average unobserved variables ($u$) must be the same for all $x$'s. $x$ must not depend on other characteristics ($u$).
+
+As long as $\beta_0$ is included in the equation, $E(u)=0$ can be assumed. This statement is addressing the distribution of the unobserved factors of the sample. The intercept term $\beta_0$ can be redefined in Equation \@ref(eq:simpreg) to make this assumption true. As it can be seen, such restriction is not too binding. It implies normalizing the unobserved factors that affect $y$ to have an average of zero in the population.
+
+Using the `r ifelse(knitr::is_html_output(), print("<key>zero conditional mean assumption</key>"), print("\\key{zero conditional mean assupmtion}"))`, $E(u|x)=0$, leads to the `r ifelse(knitr::is_html_output(), print("<key>population regression function (PRF)</key>"), print("\\key{population regression function (PRF)}"))`, $E(y|x)$ (Equation \@ref(eq:prf)):
+
+\begin{equation}
+E(u|y)=\beta_0+\beta_1x
+(\#eq:prf)
+\end{equation} 
+
+
+The `r ifelse(knitr::is_html_output(), print("<key>PRF</key>"), print("\\key{PRF}"))` is a linear function of $x$, meaning that an increase in one-unit in $x$ changes the expected value of $y$ by $\beta_1$. For any given value of $x$, the distribution of $y$ is centered about $E(y|x)$ (see Figure \@ref(fig:prf), taken from @wooldridge1996introductory)
+
+
+```{r prf, fig.cap='Population Regression Function',echo=FALSE, warning=FALSE, message=FALSE}
+
+knitr::include_graphics("./02-cross-sec/PRF.png")
+
+```
+
+Equation \@ref(eq:prf) is often called the `r ifelse(knitr::is_html_output(), print("<key>systematic part</key>"), print("\\key{systematic part}"))` of $y$ as it is the part of $y$ explained by $x$, while $u$ can be called the `r ifelse(knitr::is_html_output(), print("<key>unsystematic part</key>"), print("\\key{unsystematic part}"))`, or the part of $y$ not explained by $x$.
+
+## Ordinary Least Squares (OLS) {-}
+
+To estimate the parameters, a sample is needed. The data collected can be written for every observation $i$ as:
+
+$$y_i=\beta_0+\beta_1x_i+u_i$$
+
+
+
+
+

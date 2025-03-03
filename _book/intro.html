@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 1 Econometrics | Econometrics</title>
+  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 1 Econometrics | Econometrics" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 1 Econometrics | Econometrics" />
+  
+  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  
+
+<meta name="author" content="Mimi" />
+
+
+<meta name="date" content="2024-11-19" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="crossec.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.2.2/leaflet.js"></script>
+<script src="libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.2.2/leaflet-providers-plugin.js"></script>
+<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>About</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#usage"><i class="fa fa-check"></i><b>0.1</b> Usage</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#render-book"><i class="fa fa-check"></i><b>0.2</b> Render book</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#preview-book"><i class="fa fa-check"></i><b>0.3</b> Preview book</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Econometrics</a>
+<ul>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#how-to-start"><i class="fa fa-check"></i>How to start?</a>
+<ul>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#cross-sectional-data"><i class="fa fa-check"></i>Cross-Sectional Data</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#time-series-data"><i class="fa fa-check"></i>Time series data</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#pooled-cross-sections"><i class="fa fa-check"></i>Pooled Cross Sections</a></li>
+<li class="chapter" data-level="" data-path="intro.html"><a href="intro.html#panel-or-longitudinal-data"><i class="fa fa-check"></i>Panel or Longitudinal Data</a></li>
+</ul></li>
+<li><a href="intro.html#section" id="toc-section"></a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="crossec.html"><a href="crossec.html"><i class="fa fa-check"></i><b>2</b> Cross-Sectional Data</a>
+<ul>
+<li class="chapter" data-level="" data-path="crossec.html"><a href="crossec.html#simple-regression-model"><i class="fa fa-check"></i>Simple Regression Model</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>3</b> Spatial Econometrics</a>
+<ul>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#dimensions"><i class="fa fa-check"></i>Dimensions</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#introduction-to-coordinates"><i class="fa fa-check"></i>Introduction to Coordinates</a>
+<ul>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#polar-and-cartesian-coordinates"><i class="fa fa-check"></i>Polar and cartesian coordinates</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#spherical-coordinates"><i class="fa fa-check"></i>Spherical coordinates</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#note"><i class="fa fa-check"></i>Note</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#plotting-shapes"><i class="fa fa-check"></i>Plotting shapes</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#spatial-effects"><i class="fa fa-check"></i>Spatial effects</a>
+<ul>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#spatial-dependence"><i class="fa fa-check"></i>Spatial dependence</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#exploratory-spacial-data-analysis-esda"><i class="fa fa-check"></i>Exploratory Spacial Data Analysis (ESDA)</a>
+<ul>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#spacial-autocorrelation"><i class="fa fa-check"></i>Spacial autocorrelation</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#assumptions"><i class="fa fa-check"></i>Assumptions</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#how-to-start-1"><i class="fa fa-check"></i>How to start?</a>
+<ul>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#ols"><i class="fa fa-check"></i>OLS</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#spatially-lagged-x-slx"><i class="fa fa-check"></i>Spatially Lagged X (SLX)</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#spatial-lag-model-sar-slm"><i class="fa fa-check"></i>Spatial Lag Model (SAR) (SLM)</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#spatial-error-model-sem"><i class="fa fa-check"></i>Spatial Error Model (SEM)</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#spatial-durbin-model-sdm"><i class="fa fa-check"></i>Spatial Durbin Model (SDM)</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#spatial-durbin-error-model-sdem"><i class="fa fa-check"></i>Spatial Durbin Error Model (SDEM)</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#manski-model"><i class="fa fa-check"></i>Manski model</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#sarar-model-kelejian-prucha-sac-cliff-ord"><i class="fa fa-check"></i>SARAR model (Kelejian-Prucha) (SAC) (Cliff-Ord)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#which-model-is-the-best"><i class="fa fa-check"></i>Which model is the best?</a>
+<ul>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#for-global"><i class="fa fa-check"></i>For Global</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#for-local"><i class="fa fa-check"></i>For Local</a></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#other"><i class="fa fa-check"></i>Other</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#heteroskedasticity"><i class="fa fa-check"></i>Heteroskedasticity</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>4</b> Footnotes and citations</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>4.1</b> Footnotes</a></li>
+<li class="chapter" data-level="4.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>4.2</b> Citations</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>5</b> Blocks</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="blocks.html"><a href="blocks.html#equations"><i class="fa fa-check"></i><b>5.1</b> Equations</a></li>
+<li class="chapter" data-level="5.2" data-path="blocks.html"><a href="blocks.html#theorems-and-proofs"><i class="fa fa-check"></i><b>5.2</b> Theorems and proofs</a></li>
+<li class="chapter" data-level="5.3" data-path="blocks.html"><a href="blocks.html#callout-blocks"><i class="fa fa-check"></i><b>5.3</b> Callout blocks</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="sharing-your-book.html"><a href="sharing-your-book.html"><i class="fa fa-check"></i><b>6</b> Sharing your book</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="sharing-your-book.html"><a href="sharing-your-book.html#publishing"><i class="fa fa-check"></i><b>6.1</b> Publishing</a></li>
+<li class="chapter" data-level="6.2" data-path="sharing-your-book.html"><a href="sharing-your-book.html#pages"><i class="fa fa-check"></i><b>6.2</b> 404 pages</a></li>
+<li class="chapter" data-level="6.3" data-path="sharing-your-book.html"><a href="sharing-your-book.html#metadata-for-sharing"><i class="fa fa-check"></i><b>6.3</b> Metadata for sharing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Econometrics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="intro" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Econometrics<a href="intro.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<ul>
+<li><p><defi>Econometrics</defi>: Using statistical methods for estimating relationships in economics. It can be used to forecast and policy evaluation.</p>
+<ul>
+<li>It uses <key>empirical data</key> to test assumptions, relationships and theories.</li>
+</ul></li>
+</ul>
+<div id="how-to-start" class="section level2 unnumbered hasAnchor">
+<h2>How to start?<a href="intro.html#how-to-start" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><p>What is the question of interest?</p></li>
+<li><p>An <key>economic model</key> may be needed to test economic theories; they are equations stating the relationship you are looking for. It determines the variables that should be included. Intuition can be also a starting point:</p>
+<ul>
+<li>The relationship between wages and years of education: <span class="math inline">\(wages=f(y\_educ)\)</span>. It is expected that years of education increase wages.</li>
+</ul></li>
+<li><p>The <key>econometric model</key> specify the function of the economic model: Wages depend on the years of education and a term u.</p></li>
+</ul>
+<p><span class="math display">\[wages=\beta_0+\beta_1y\_educ+u\]</span></p>
+<ul>
+<li><p>However, not every factor that affects wages can be observed or measured. The term <key>u</key> represent such unobserved factors, and the measuring error of the included variables. It can never be eliminated entirely. It is also called <key>error term</key> or <key>disturbance</key></p></li>
+<li><p><span class="math inline">\(\beta_n\)</span> are the <key>parameters</key>. They give information about the relationship between the independent and dependent variable.</p></li>
+<li><p>After establishing the econometric model, we can start doing hypothesis about the parameters. Is the relationship positive, negative or zero?</p></li>
+<li><p>Then, data is required to estimate the parameters of the established model. There are different types of data structures:</p></li>
+</ul>
+<div id="cross-sectional-data" class="section level3 unnumbered hasAnchor">
+<h3>Cross-Sectional Data<a href="intro.html#cross-sectional-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A Sample of variety of units taken in a point in time. Minor timing differences in collecting the data are ignored. In these kinds of data, the order of the observations doesn’t matter.</p>
+<p><key>Random sampling</key> is needed to get better results. It means the observations drawed are independent. However, it is not always appropriate to make this assumption. Later we will understand that this aspect is important to hold the ceteris paribus assumption and establish a relationship between the variables, given everything else is constant. <key>Random sampling</key> is violated when population is not large enough, so the observations are not independent draws. It those cases, the same methodology has to be refined. In some cases, <key>Random sampling</key> can be checked if the descriptive statistics are <key>balanced</key>; for example, if we are making a comparison between women and men, the sample should be compound 50% women and 50% men, approximately.</p>
+<p>An example of <key>cross-sectional data</key> using <strong>dplyr</strong> package <span class="citation">(<a href="#ref-dplyr">Wickham et al. 2023</a>)</span> is shown below:</p>
+<pre><code>## # A tibble: 87 × 14
+##    name     height  mass hair_color skin_color eye_color birth_year sex   gender
+##    &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; 
+##  1 Luke Sk…    172    77 blond      fair       blue            19   male  mascu…
+##  2 C-3PO       167    75 &lt;NA&gt;       gold       yellow         112   none  mascu…
+##  3 R2-D2        96    32 &lt;NA&gt;       white, bl… red             33   none  mascu…
+##  4 Darth V…    202   136 none       white      yellow          41.9 male  mascu…
+##  5 Leia Or…    150    49 brown      light      brown           19   fema… femin…
+##  6 Owen La…    178   120 brown, gr… light      blue            52   male  mascu…
+##  7 Beru Wh…    165    75 brown      light      blue            47   fema… femin…
+##  8 R5-D4        97    32 &lt;NA&gt;       white, red red             NA   none  mascu…
+##  9 Biggs D…    183    84 black      light      brown           24   male  mascu…
+## 10 Obi-Wan…    182    77 auburn, w… fair       blue-gray       57   male  mascu…
+## # ℹ 77 more rows
+## # ℹ 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,
+## #   vehicles &lt;list&gt;, starships &lt;list&gt;</code></pre>
+<p>Some variables can correspond to a different time period, but have a relationship with the dependent variable, so they must be included. That is not going to lead to special problems in the analysis of the data.</p>
+<p>Chapter <a href="crossec.html#crossec">2</a> will focus on the analysis of these type of data.</p>
+</div>
+<div id="time-series-data" class="section level3 unnumbered hasAnchor">
+<h3>Time series data<a href="intro.html#time-series-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p>This type of data consist on a variable or plenty variables over time. Past events can influence the future. That is the expected behavior of series like stocks or GDP.</p></li>
+<li><p>Unlike in cross-sectional data, time series data order matters: the chronology of events holds important information for the analysis. Even lags can hold useful information.</p></li>
+<li><p>Observations rarely can be assumed to be independent across time.</p></li>
+<li><p>Cross-section methodologies can be used in time series; however, due to the nature of time series, like trends, modifications have been made in order to study time series.</p></li>
+<li><p><key>Data frequency</key> is one of the characteristics of the data collected in time series. The most common ones are daily, weekly, monthly and annually.</p></li>
+<li><p>An example of a time series from the <strong>datasets</strong> package <span class="citation">(<a href="#ref-datasets"><strong>datasets?</strong></a>)</span> is displayed below:</p></li>
+</ul>
+<pre><code>##      Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+## 1949 112 118 132 129 121 135 148 148 136 119 104 118
+## 1950 115 126 141 135 125 149 170 170 158 133 114 140
+## 1951 145 150 178 163 172 178 199 199 184 162 146 166
+## 1952 171 180 193 181 183 218 230 242 209 191 172 194
+## 1953 196 196 236 235 229 243 264 272 237 211 180 201
+## 1954 204 188 235 227 234 264 302 293 259 229 203 229
+## 1955 242 233 267 269 270 315 364 347 312 274 237 278
+## 1956 284 277 317 313 318 374 413 405 355 306 271 306
+## 1957 315 301 356 348 355 422 465 467 404 347 305 336
+## 1958 340 318 362 348 363 435 491 505 404 359 310 337
+## 1959 360 342 406 396 420 472 548 559 463 407 362 405
+## 1960 417 391 419 461 472 535 622 606 508 461 390 432</code></pre>
+<ul>
+<li>Another characteristic of time series is <key>seasonality</key>. It shows effects like the weather.</li>
+</ul>
+</div>
+<div id="pooled-cross-sections" class="section level3 unnumbered hasAnchor">
+<h3>Pooled Cross Sections<a href="intro.html#pooled-cross-sections" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p>Cross-section and time series features.</p></li>
+<li><p>For example, a survey conducted in different years to different random samples.</p></li>
+<li><p>It helps analyzing the effects of policies, having measured the variables before and after it was implemented.</p></li>
+<li><p>The order of the data is not important. However, corresponding year of the information should be tracked.</p></li>
+<li><p>The analysis is similar to the cross section data. Although, it is important to account for secular differences in the variables.</p></li>
+<li><p>How a key relationship has changed over time?</p></li>
+<li><p>Below there is an example of these type of data:</p></li>
+</ul>
+<pre><code>##   observation year     price   income
+## 1           1 2022 177935.42 73153.77
+## 2           2 2022  71976.22 77992.54
+## 3           3 2022 103525.42 69557.17
+## 4           4 2022  88491.13 69557.17
+## 5           5 2022  88491.13 73153.77
+## 6           6 2022  71976.22 73153.77</code></pre>
+<pre><code>##     observation year     price   income
+## 495         495 2023 103525.42 77992.54
+## 496         496 2023  88491.13 73153.77
+## 497         497 2023 177935.42 69557.17
+## 498         498 2023 177935.42 75404.00
+## 499         499 2023 177935.42 69557.17
+## 500         500 2023 177935.42 77992.54</code></pre>
+</div>
+<div id="panel-or-longitudinal-data" class="section level3 unnumbered hasAnchor">
+<h3>Panel or Longitudinal Data<a href="intro.html#panel-or-longitudinal-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p>Every cross-sectional observation is a time series.</p></li>
+<li><p>The <key>same</key> individuals are tracked in time, unlike in pooled cross-section data. The same units are included.</p></li>
+<li><p>An example is provided using the <strong>gapminder</strong> package <span class="citation">(<a href="#ref-gapminder">Bryan 2023</a>)</span></p></li>
+</ul>
+<pre><code>## # A tibble: 6 × 6
+##   country     continent  year lifeExp      pop gdpPercap
+##   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1 Afghanistan Asia       1952    28.8  8425333      779.
+## 2 Afghanistan Asia       1957    30.3  9240934      821.
+## 3 Afghanistan Asia       1962    32.0 10267083      853.
+## 4 Afghanistan Asia       1967    34.0 11537966      836.
+## 5 Afghanistan Asia       1972    36.1 13079460      740.
+## 6 Afghanistan Asia       1977    38.4 14880372      786.</code></pre>
+<ul>
+<li><p>An advantage of these type of data is that having the same observations in time makes it possible to control by unobserved characteristics of the individuals.</p>
+<ul>
+<li><p>We are comparing the same individuals over time, so their unobserved characteristics are ‘included’ in the analysis.</p></li>
+<li><p>It can facilitate causal inference having more than one observation.</p></li>
+<li><p>The behavior of lags can be studied to look for the effects of a policy after a time has passed.</p></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="section" class="section level2 unnumbered">
+<h2 class="unnumbered"></h2>
+<p>Without the <key>ceteris paribus</key> assumption, the <key>causal effect</key> that we are looking for is still unknown. Holding the other variables fixed is crucial to determine the link between an independent variable and the dependent variable. To compare between two potential outcomes for the same individual is called <key>counterfactual outcomes</key>. We are considering the change in the outcome given a change in a single variable, everything else constant. The idea is to compare two different states of the world.</p>
+<p>Remember that experimental data has different characteristics than the available data <span class="citation">(<a href="#ref-wooldridge1996introductory">Wooldridge 2016</a>)</span>. The ideal would be to compare all the possible scenarios for the same individual, and get the estimates that way. That is not possible, as from all the potential outcomes, only one is observable. To establish causal relationships between non-experimental data is then, a challenge.</p>
+<p>For practical aspects, <key>randomization</key> can solve some of the not observable variables that are not taken into account, as a good random selection avoid <key>selection bias</key>. For example, an experiment on how the amount of fertilizer affects yield productivity can be run, as long as the amount of fertilizer was randomly assigned to the land in the experiment. Otherwise, <key>selection bias</key>, as for example, yields near to the river got more fertilizer than dryer areas. <key>Randomization</key> helps the ceteris paribus assumption to hold. If randomization is not done, the relationship between the factors might be spurious.</p>
+<p>Even though many topics are interesting to run an experiment, not everything should be done, given costs and ethical issues <span class="citation">(<a href="#ref-wooldridge1996introductory">Wooldridge 2016</a>)</span>. Then, nonexperimental data can be collected; that means, data that exist but wasn’t collected just to run the experiment. Data usually comes from surveys, as Census.</p>
+<p>Omitted factors that are relevant to establish a relationship with the independent variable are a known issue. As a matter of fact, not all the determinants of wages are easy to quantify, making the analysis more complex. Even though education can be considered an observed variable (you have a degree that guarantees you finished school), others are not quite obvious, like talents, gifts or innate abilities <span class="citation">(<a href="#ref-wooldridge1996introductory">Wooldridge 2016</a>)</span>. Not including factors that are related can create bias in the relationship between the included variables. For example, the relation between education level and income can be negative if we are missing to add something to the model. If the omitted variable can be observed, adding it should solve the problem. However, if that is not the case and the variable can’t be easily measured, we can have an issue.</p>
+<p>To quantify the effects between two variables, problems inferring causality can arise. <span class="citation">Wooldridge (<a href="#ref-wooldridge1996introductory">2016</a>)</span> mentions the relationship between the minimum wage and unemployment. We can easily imply that these wages have impacts on other variables that also affect unemployment. Even considering these as time series, if other factors are controlled, the ceteris paribus assumption can still hold.</p>
+
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-gapminder" class="csl-entry">
+Bryan, Jennifer. 2023. <em>Gapminder: Data from Gapminder</em>. <a href="https://CRAN.R-project.org/package=gapminder">https://CRAN.R-project.org/package=gapminder</a>.
+</div>
+<div id="ref-dplyr" class="csl-entry">
+Wickham, Hadley, Romain Francois, Lionel Henry, Kirill Muller, and Davis Vaughan. 2023. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>.
+</div>
+<div id="ref-wooldridge1996introductory" class="csl-entry">
+Wooldridge, Jeffrey M. 2016. <span>“Introductory Econometrics: A Modern Approach 7th Ed.”</span>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="crossec.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/01-intro.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

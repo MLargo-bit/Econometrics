@@ -1,0 +1,753 @@
+# Spatial Econometrics {#spatial}
+
+Chapter \@ref(intro) gives initial concepts and definitions to start working econometrics. Nonetheless, the constant evolution of methodologies have brought new intriguing issues, like `r ifelse(knitr::is_html_output(), print("<key>spacial econometrics</key>"), print("\\key{spacial econometrics}"))`.
+
+In many cases, it is expected that the variables' location are related to the studied outcome. @fischer2010handbook mentioned that adding spatial data to a model specification can help with mis-specification problems that can lead to inference problems of the models.
+
+The prediction feature of these types of models is not so straightforward. To the date, these kind of models helps to determine the outcome of a missing region. As expected, that presents concerning limitations. (I can be wrong in this).
+
+- `r ifelse(knitr::is_html_output(), print("<defi>Spacial data</defi>"), print("\\defi{Spacial data}"))`: They have spacial references, like coordinates, longitude and latitude.
+
+A good point to start is asking yourself if it is expected a random process. In the case of spatial variables, characteristics can have `r ifelse(knitr::is_html_output(), print("<key>spillover effects</key>"), print("\\key{spillover effects}"))`. Independent variables from other locations can affect their outcomes. That would mean the process is not random.
+
+## Dimensions {-}
+
+Geometries are build up with points, that are coordinates in a space from 2 to 4 dimensions:
+  
+- $X$ and $Y$.
+- $Z$ denoting height.
+- $M$ denoting some measurement associated to the point, like the time or the measurement error.
+
+-There are four possible cases:
+
+  - Bidimensional points refer to $X$ and $Y$: east and north (longitude and latitude). $XY$.
+  
+  - Tridimensionals: $XYZ$.
+  
+  - Tridimensionals: $XYM$.
+  
+  - Four dimensions: $XYZM$.
+  
+`r ifelse(knitr::is_html_output(), print("<nam>Jean Paelinck</nam>"), print("\\nam{Jean Paelinck}"))` focuses on five characteristics of spacial econometrics study field:
+
+  - Spatial interdependence in spatial models.
+  - Asymmetry in spatial relationships.
+  - The relevance of other explanatory variables located in other spaces.
+  - Modeling the space.
+
+
+## Introduction to Coordinates {-}
+
+### Polar and cartesian coordinates {-}
+
+```{r polcar, fig.cap='Polar and Cartesian Coordinates', echo=FALSE, fig.align='center'}
+
+knitr::include_graphics("./images/spacial/coor_pol_car.PNG")
+
+```
+
+
+Figure \@ref(fig:polcar) shows Polar (in green colour) and Cartesian (in orage colour) coordinates.
+
+To convert from Polar to Cartesian coordinates, Cosine and Sine functions are needed:
+
+$$\begin{split}
+x&=r\times cos(\phi)\\\\
+y&=r\times sin(\phi)
+\end{split}$$
+
+To convert from Cartesian to Polar coordinates we use `r ifelse(knitr::is_html_output(), print("<nam>Pythagorean theorem</nam>"), print("\\nam{Pythagorean theorem}"))` and tangent's inverse function: the arctangent:
+
+$$\begin{split}
+r&=\sqrt{x^2+y^2}\\\\
+\phi&=tan^{-1}(y/x)
+\end{split}$$
+
+The answers is expressed in radians.
+
+The answer depends on the quadrant you are working on:
+
+  - Quadrant I: Use $tan^{-1}(y/x)$.
+  - Quadrant II: Add $180^o$ to $tan^{-1}(y/x)$.
+  - Quadrant III: Add $180^o$ to $tan^{-1}(y/x)$.
+  - Quadrant VI: Add $360^o$ to $tan^{-1}(y/x)$.
+
+### Spherical coordinates {-}
+
+Are Cartesian coordinates in three dimensions: $(x,y,z)$.
+
+In Spherical coordinates are expressed as: $(r,\lambda, \phi)$, where $r$ is the radious of the sphere, $\lambda$ is the longitude, measured in the plain $(x,y)$ from x axis, and $\phi$ is the latitude, the angle between the vector and the plain $(x,y)$.
+
+- $-180^o \le \lambda \le 180^o (0^o \le \lambda \le 360^o)$
+
+- $-90^o \le \phi \le 90^o$
+
+### Note {-}
+
+Difference in distances can be due to the methodology to calculate them.  `r ifelse(knitr::is_html_output(), print("<key>Elipsoidal coordinates</key>"), print("\\key{Elipsoidal coordinates}"))` consider the spherical shape of the Earth, while `r ifelse(knitr::is_html_output(), print("<key>projected coordinates</key>"), print("\\key{projected coordinates}"))` consist in using two dimensions, as a flat surface.
+
+If the two objects are nearby, it is expected that the two methodologies give similar results. However, as distance increases, the error from selecting a method over the other increases as well. Data transformations are available, as seen above. 
+
+
+## Plotting shapes {-}
+
+A shape file is required. The easiest way to plot is using the package `sf` [@sfarticle] [@sds]:
+
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(sf)
+
+system.file("gpkg/nc.gpkg", package="sf") |>
+    read_sf() -> nc
+nc.32119 <- st_transform(nc, 'EPSG:32119')
+nc.32119 |>
+    select(BIR74) |>
+    plot(graticule = TRUE, axes = TRUE)
+
+```
+
+
+For interactive maps:
+
+```{r message=FALSE, warning=FALSE}
+
+library(mapview) |> suppressPackageStartupMessages()
+mapviewOptions(fgb = FALSE)
+nc.32119 |> mapview(zcol = "BIR74", legend = TRUE, col.regions = sf.colors)
+
+```
+
+
+
+```{r message=FALSE, warning=FALSE}
+library(stars)
+par(mfrow = c(2, 2))
+par(mar = rep(1, 4))
+tif <- system.file("tif/L7_ETMs.tif", package = "stars")
+x <- read_stars(tif)[,,,1]
+image(x, main = "(a)")
+image(x[,1:10,1:10], text_values = TRUE, border = 'grey', main = "(b)")
+image(x, main = "(c)")
+set.seed(131)
+pts <- st_sample(st_as_sfc(st_bbox(x)), 3)
+plot(pts, add = TRUE, pch = 3, col = 'blue')
+image(x, main = "(d)")
+plot(st_buffer(pts, 500), add = TRUE, pch = 3, border = 'blue', col = NA, lwd = 2)
+```
+
+
+
+
+## Spatial effects {-}
+
+### Spatial dependence {-}
+
+The idea of this branch of knowledge is to study the `r ifelse(knitr::is_html_output(), print("<key>spatial effects</key>"), print("\\key{spatial effects}"))`:
+
+- `r ifelse(knitr::is_html_output(), print("<defi>Spacial dependence</defi>"), print("\\defi{Spacial dependence}"))` or `r ifelse(knitr::is_html_output(), print("<defi>Spacial autocorrelation</defi>"), print("\\defi{Spacial autocorrelation}"))`: is the lack of independence in cross-sectional data. Things closer in space can have a stronger relationship. Distance between shapes is important. This can happen due to:
+
+  - Measurement problems of the observation units.
+  
+  - Spatial aggregation; presence of externalities and spill-over effects.
+  
+  - Spatial phenomena.
+  
+The dependence is similar to the one present in time series; the main difference is the multidirectional dependence the spacial has, by nature.
+
+
+- `r ifelse(knitr::is_html_output(), print("<defi>Spacial heterogeneity</defi>"), print("\\defi{Spacial heterogeneity}"))`: Lack of stability of the relationships to study. Parameters and functional forms change with the position, so it is not homogeneous to the data. It can be solved using standard econometric techniques. 
+
+- If dependence and heterogeneity are observed in spatial data, they can only be solved using spatial econometrics. 
+
+
+
+
+There is a functional relationship between what happens in one place and other.
+
+## Exploratory Spacial Data Analysis (ESDA)  {-}
+
+- It is another way to call spacial statistics methods.
+
+- `r ifelse(knitr::is_html_output(), print("<key>ESDA</key>"), print("\\key{ESDA}"))` is the starting point to prove if spacial correlation is present. 
+
+- Conclusions from the ESDA, the hypothesis of spacial randomness can be rejected, to look for spacial conglomerates. It also helps with the spacial specification of the models.
+
+- There are two types of measurements:
+
+  - Global measurements: Indicator of spacial autocorrelation or general similarity between regions. Its disadvantage is to average.
+  
+  - Local measurements: These statistics are determined for each region. There is no generalization of the area. Makes possible to compare between regions if they are similar or different. 
+
+
+### Spacial autocorrelation {-}
+
+- `r ifelse(knitr::is_html_output(), print("<defi>Spacial autocorrelation</defi>"), print("\\defi{Spacial autocorrelation}"))`: Happens when variables are correlated with the location. It means that observations that are closer have more similarities in between than the distant ones. That means that knowing the values of a location can help predicting the near ones. 
+
+- The `r ifelse(knitr::is_html_output(), print("<key>degree of autocorrelation</key>"), print("\\key{degree of autocorrelation}"))` is another concept that can be looked for. It is the distance from where the observations become independent. 
+
+- `r ifelse(knitr::is_html_output(), print("<key>Global autocorrelation</key>"), print("\\key{Global autocorrelation}"))` can be measured using `r ifelse(knitr::is_html_output(), print("<key>Moran's I statistics</key>"), print("\\key{Moran's I statistics}"))` and `r ifelse(knitr::is_html_output(), print("<key>Geary's C</key>"), print("\\key{Geary's C}"))`.
+
+- The most popular local measurements are part of the `r ifelse(knitr::is_html_output(), print("<key>Local Indicator of Spacial Association (LISA)</key>"), print("\\key{Local Indicator of Spacial Association (LISA)}"))`. It includes `r ifelse(knitr::is_html_output(), print("<key>Moran's $I_i$ statistics</key>"), print("\\key{Moran's $I_i$ statistics}"))` and `r ifelse(knitr::is_html_output(), print("<key>Geary's $C_i$ local statistics</key>"), print("\\key{Geary's $C_i$ local statistics}"))`.
+
+- Global statistics can identify conglomerates and spacial relationships just for all the system, but they can be disaggregated into local statistics to detect local spacial relationship paterns between regions.
+
+
+#### Moran's I {-}
+
+- $H_0$: No spacial autocorrelation; i.e. the values are randomly distributed.
+
+- $I>0$: Positive spacial autocorrelation. The values to the distance are similar.
+
+- $I<0$: Negative spacial autocorrelation. The values to the distance are different.
+
+- $I=0$: The values to the distance are randomly distributed. 
+
+
+
+```{r, warning=FALSE, eval=FALSE}
+
+moran()
+moran.test()
+moran.mc()
+moran.plot()
+
+```
+
+
+
+#### Geary's C {-}
+
+- $H_0$: No spacial autocorrelation; i.e. the values are randomly distributed.
+
+- $0<C>1$: Positive spacial autocorrelation. The values to the distance are similar.
+
+- $1<C<2$: Negative spacial autocorrelation. The values to the distance are different.
+
+
+
+
+```{r, warning=FALSE, eval=FALSE}
+
+geary()
+geary.test()
+geary.mc()
+
+```
+
+### Assumptions {-}
+
+- `r ifelse(knitr::is_html_output(), print("<key>Estationarity</key>"), print("\\key{Estationarity}"))`. The analized data must be normal distributed with constant mean and variance.
+
+  - 
+
+## How to start? {-}
+
+The OLS regression is a good way to start. ESDA can be performed, starting with plotting the dependent variable and see how it is distributed around the shapes. 
+
+
+### OLS {-}
+
+We can begin assuming the model is non-spatial.
+
+$$y=X\beta+\varepsilon$$
+
+```{r, warning=FALSE, eval=TRUE}
+
+library(sf)
+library(tidyverse)
+library(tidycensus)
+library(corrr)
+library(tmap)
+library(spdep)
+library(tigris)
+library(rmapshaper)
+library(flextable)
+library(car)
+library(spatialreg)
+library(stargazer)
+
+# Bring in census tract data. 
+wa.tracts <- get_acs(geography = "tract", 
+              year = 2019,
+              variables = c(tpop = "B01003_001", tpopr = "B03002_001", 
+                            nhwhite = "B03002_003", nhblk = "B03002_004",
+                             nhasn = "B03002_006", hisp = "B03002_012",
+                            unemptt = "B23025_003", unemp = "B23025_005",
+                            povt = "B17001_001", pov = "B17001_002", 
+                            colt = "B15003_001", col1 = "B15003_022", 
+                            col2 = "B15003_023", col3 = "B15003_024", 
+                            col4 = "B15003_025", mobt = "B07003_001", 
+                            mob1 = "B07003_004"),
+              state = "WA",
+              survey = "acs5",
+              output = "wide",
+              geometry = TRUE)
+
+# calculate percent race/ethnicity, and keep essential vars.
+wa.tracts <- wa.tracts %>% 
+  rename_with(~ sub("E$", "", .x), everything()) %>%  #removes the E 
+  mutate(pnhwhite = 100*(nhwhite/tpopr), pnhasn = 100*(nhasn/tpopr), 
+              pnhblk = 100*(nhblk/tpopr), phisp = 100*(hisp/tpopr),
+              unempr = 100*(unemp/unemptt),
+              ppov = 100*(pov/povt), 
+              pcol = 100*((col1+col2+col3+col4)/colt), 
+              pmob = 100-100*(mob1/mobt)) %>%
+  dplyr::select(c(GEOID,tpop, pnhwhite, pnhasn, pnhblk, phisp, ppov,
+                  unempr, pcol, pmob))  
+
+# Bring in city boundary data
+pl <- places(state = "WA", year = 2019, cb = TRUE)
+
+# Keep Seattle city
+sea.city <- filter(pl, NAME == "Seattle")
+
+#Clip tracts using Seattle boundary
+sea.tracts <- ms_clip(target = wa.tracts, clip = sea.city, remove_slivers = TRUE)
+
+#reproject to UTM NAD 83
+sea.tracts <-st_transform(sea.tracts, 
+                                 crs = "+proj=utm +zone=10 +datum=NAD83 +ellps=GRS80")
+
+
+cdcfile <- read_csv("https://raw.githubusercontent.com/crd230/data/master/PLACES_WA_2022_release.csv")
+
+
+sea.tracts <- sea.tracts %>%
+              mutate(GEOID = as.numeric(GEOID)) %>%
+              left_join(cdcfile, by = "GEOID")
+
+
+sea.tracts %>%
+  select(DEP_CrudePrev, unempr, pmob, pcol, ppov, pnhblk, phisp, tpop) %>%
+  st_drop_geometry() %>%
+  summary()
+
+cor.table <- sea.tracts %>%
+  dplyr::select(-GEOID) %>%
+  st_drop_geometry() %>%
+  correlate()
+
+cor.table
+
+
+sea.tracts %>%
+  ggplot() +
+    geom_histogram(aes(x=DEP_CrudePrev)) +
+    xlab("Crude prevalance of depression")
+
+
+fit.ols.simple <- lm(DEP_CrudePrev ~ ppov, data = sea.tracts)
+
+summary(fit.ols.simple)
+
+
+fit.ols.multiple <- lm(DEP_CrudePrev ~ unempr + pmob + pcol + ppov + pnhblk + 
+                phisp + log(tpop), data = sea.tracts)
+
+
+summary(fit.ols.multiple)
+
+qqPlot(fit.ols.multiple)
+
+
+plot(resid(fit.ols.multiple))
+
+tm_shape(sea.tracts, unit = "mi") +
+  tm_polygons(col = "DEP_CrudePrev", style = "quantile",palette = "Reds", 
+              border.alpha = 0, title = "") +
+  tm_scale_bar(breaks = c(0, 2, 4), text.size = 1, position = c("right", "bottom")) +
+  tm_layout(main.title = "Poor Mental Health Prevalence, Seattle 2017 ",  main.title.size = 0.95, frame = FALSE, legend.outside = TRUE, 
+            attr.outside = TRUE)
+
+```
+
+Plot the residuals too. The idea is to look for cluster paterns, meaning the variable or the residuals are autocorrelated with their neighborhood. 
+
+```{r, warning=FALSE, eval=FALSE}
+
+sea.tracts <- sea.tracts %>%
+              mutate(olsresid = resid(fit.ols.multiple))
+
+
+tm_shape(sea.tracts, unit = "mi") +
+  tm_polygons(col = "olsresid", style = "quantile",palette = "Reds", 
+              border.alpha = 0, title = "") +
+  tm_scale_bar(breaks = c(0, 2, 4), text.size = 1, position = c("right", "bottom")) +
+  tm_layout(main.title = "Residuals from linear regression in Seattle Tracts",  main.title.size = 0.95, frame = FALSE, legend.outside = TRUE,
+            attr.outside = TRUE)
+
+
+```
+
+Then, start looking for problems in the data.
+
+To test for spatial effects, the row-standardized weights have to be measured and listed. This weight matrix is going to be called $W$ in the equations below.  
+
+Moran's plot indicates there is evidence of association between the neighborhood values and 
+
+```{r, warning=FALSE, eval=FALSE}
+
+seab<-poly2nb(sea.tracts, queen=T)
+
+seaw<-nb2listw(seab, style="W", zero.policy = TRUE)
+
+
+moran.plot(as.numeric(scale(sea.tracts$DEP_CrudePrev)), listw=seaw, 
+           xlab="Standardized Depression Prevalence", 
+           ylab="Neighbors Standardized Depression Prevalence",
+           main=c("Moran Scatterplot for Depression Prevalence", "in Seatte") )
+
+```
+
+The plot shows what it looks like an association. However, the Global Moran's I is calculated for the dependent variable and the residuals.
+
+`lm.morantest()` is a function made for the residuals. It needs the object were the model is and the weights. The Lagrange Multiplyer test can be also performed to reach a conclusion, using the function `lm.RStest()`
+
+```{r, warning=FALSE, eval=FALSE}
+
+moran.mc(sea.tracts$DEP_CrudePrev, seaw, nsim=999)
+
+lm.morantest(fit.ols.multiple, seaw)
+
+```
+
+
+The null hypothesis of independence (no spatial correlation) can be rejected, indicating the presence of spatial autocorrelation. OLS coefficients are biased and inefficient. Another model should be approached.
+
+
+```{r, warning=FALSE, eval=FALSE}
+
+# lm.LMtests(fit.ols.multiple, seaw, test='all')
+lm.RStests(fit.ols.multiple, seaw, test='all')
+```
+
+The results given by the Lagrange Multipliers are:
+
+- RSerr is testing how much the model improves if we run a spatial error model. The null hypothesis is that OLS performs better. Given the p-value, we can reject the null. A spatial error model should be tested. 
+
+- RSlag is testing how much the model improves if we run a spatial lag model. The null hypothesis is that the OLS performs better. Given the p-value, we can reject the null. A spatial lag model should be tested.
+
+- adjRSerr is the robust test. It tries to filter some of the false positives. Given the p-value, the null hypothesis cannot be rejected. That means OLS is better.
+
+- adjRSlag is the robust test for the spatial lag model. The p-value suggest that this model is better than OLS, as the null hypothesis is rejected. 
+
+- SARMA is testing how much the model improves if we run a spatial autoregresive model. The null hypothesis is that OLS performs better. We can reject the null, given the significance of the p-value.
+
+### Spatially Lagged X (SLX) {-}
+
+It is also called Spatial Durbin linear.
+
+It is the average value of the neighboring Xs. We include the values of independent variables of neighboring regions. It is a `r ifelse(knitr::is_html_output(), print("<key>Local Espatial Model</key>"), print("\\key{Local Espatial Model}"))`. 
+
+$$y=X\beta+WX\theta+\varepsilon$$
+
+
+```{r, warning=FALSE, eval=FALSE}
+
+reg2<-lmSLX(DEP_CrudePrev ~ unempr + pmob + pcol + ppov + pnhblk + 
+                phisp + log(tpop), data = sea.tracts, seaw)
+
+summary(reg2)
+
+```
+
+The coefficient of the variable and the lag can have different signs. The `r ifelse(knitr::is_html_output(), print("<key>direct effect</key>"), print("\\key{direct effect}"))` is the coefficient of the X variable, while the `r ifelse(knitr::is_html_output(), print("<key>indirect effect</key>"), print("\\key{indirect effect}"))` is the coefficient of the lags. What is the total effect then? The `impact()` function gives the marginal effects, and what would the overall impact in the dependant variable be if all regions increase or decrease in one of their variables.
+
+```{r, warning=FALSE, eval=FALSE}
+
+impacts(reg2, listw=seaw)
+summary(impacts(reg2, listw=seaw), zstats=TRUE)
+
+```
+
+
+It is important to check out the p-values, as the direct and indirect effect can be not significant, but significant as a total.
+
+Remember marginal effects interpretation is not the same as the coefficients! The sign of the total effects gives the sign of the effect in de dependent variable, but not the magnitude. 
+
+### Spatial Lag Model (SAR) (SLM) {-}
+
+It is not the same Simultaneaous Autorregresive model, SAR. It includes the dependent variable of neighboring regions, y. It is a `r ifelse(knitr::is_html_output(), print("<key>Global Espatial Model</key>"), print("\\key{Global Espatial Model}"))`. As it affects the y variable, it has a feedback effect: what happens to the neighbors affects me, affecting the neighbors again and beyond. Every region of the network is being affected.
+
+$$y=X\beta+\rho Wy+\varepsilon$$
+```{r, warning=FALSE, eval=FALSE}
+
+reg3<- lagsarlm(DEP_CrudePrev ~ unempr + pmob + pcol + ppov + pnhblk + 
+                phisp + log(tpop), data = sea.tracts, seaw)
+
+
+summary(reg3)
+
+```
+
+
+Remember Rho $\rho$ is the spatial lag parameter in the equation. It gives the degree in which the y values of the neighbors affect us, and if the effect is positive of negative.
+
+The coefficients can't be interpreted, because there is a feedback effect, from the dependent variables affecting each other from the neighborhoods. Increasing any of our X affects our y, that affects the neighbors y, generating an infinite feedback effect. The `impacts()` function gives the total marginal effects. In this case, the argument R is needed. Given the nature of the model, where infitive feedback is expected, a number of simulations is required. We get different z-stats and p-values in every simulation (a seed should be used to get the same results).
+
+
+```{r, warning=FALSE, eval=FALSE}
+
+impacts(reg3, listw=seaw)
+
+summary(impacts(reg3, listw=seaw, R=500), zstats=TRUE)
+
+```
+
+
+If the weights matrix is very large, the following approach is recommended:
+
+```{r, warning=FALSE, eval=FALSE}
+
+W <- as(rwm_n, "CsparseMatrix")
+trMC <- trW(W, type="MC")
+
+```
+
+
+
+The `r ifelse(knitr::is_html_output(), print("<key>direct effect</key>"), print("\\key{direct effect}"))` are how my independent variable affects my dependent variable. The `r ifelse(knitr::is_html_output(), print("<key>indirect effect</key>"), print("\\key{indirect effect}"))` is telling how a change in my neighbor's variable affects my dependent variable. 
+
+
+### Spatial Error Model (SEM) {-}
+
+This  global model models dependency in the residuals. It treats the dependence as nuisance. If there is a spatial error and an OLS model is selected instead of a SEM, the coefficients are not going to have the minimum variance (inefficient), affecting the inference. The spillover is the residual.
+
+The interpretation is that there is a missing variable that is spatially correlated.
+
+$$\begin{split}
+y&=X\beta+u\\\\
+u&=\lambda Wu+\varepsilon
+\end{split}$$
+
+
+```{r, warning=FALSE, eval=FALSE}
+
+fit.err<-errorsarlm(DEP_CrudePrev ~ unempr + pmob+ pcol + ppov + pnhblk  + 
+                      phisp + log(tpop),  
+                    data = sea.tracts, 
+                    listw = seaw) 
+
+summary(fit.err)
+
+
+```
+
+
+pmob and ppov are positively related with the dependent variable, as they are the only significant variables. Lamdba is the lag error parameter. Given that is significant according to all test performed, it is an indicator for spatial autocorrelation in the error. That means there is a stochastic shock to the neighbors, and how that affects our own stochastic term.
+
+This coefficients can be directly interpreted as marginal effects.
+
+#### Spatial Hausman test {-}
+
+Hausman test in panel data. Can include fixed effect that might be correlated with the included variables, but bias is expected if fixed effects are excluded. 
+
+In panel data it is testing to see if leaving out the fixed effect causes bias the other coefficients. Are the estimates close if the fixed effects are included vs when they are not? It is a decision between bias and efficiency. 
+
+Spatial Hausman test compares two models: OLS and SEM. The null hypothesis is that SEM is a good model to capture the spatial effects. 
+
+Compares parameters. If they are too different, it is a sign that neither of them is correct. A spatial dependence can be present, and the SEM cannot be capturing those results.
+
+```{r, warning=FALSE, eval=FALSE}
+
+
+Hausman.test(fit.err)
+
+```
+
+For our example, we can reject the null hypothesis at a 95\% confidence level that the SEM is a good model for the data. We should explore a different model.
+
+
+
+### Spatial Durbin Model (SDM) {-}
+
+Global model. It is going to have spillover effects from one region to all the data set, even if they are not specified as neighbors.
+
+$$y=\rho Wy+X\beta+WX\theta+\varepsilon$$
+```{r, warning=FALSE, eval=FALSE}
+
+reg6<-lagsarlm(DEP_CrudePrev ~ unempr + pmob+ pcol + ppov + pnhblk  + 
+                      phisp + log(tpop),  
+                    data = sea.tracts, 
+                    listw = seaw, type='mixed') 
+
+summary(reg6)
+
+
+```
+
+$\rho$ gives the impact of the neighboring y values. The marginal effects are needed in order to interpretate these  models.
+
+
+### Spatial Durbin Error Model (SDEM) {-}
+
+It is a local model. If something changes, only impacts the direct neighbors and not all the data set. The independent variables from the neighbors are added as lags.
+
+$$\begin{split}
+y&=X\beta+WX\theta+u\\\\
+u&=\lambda Wu+\varepsilon
+\end{split}$$ 
+
+```{r, warning=FALSE, eval=FALSE}
+
+reg5<-errorsarlm(DEP_CrudePrev ~ unempr + pmob+ pcol + ppov + pnhblk  + 
+                      phisp + log(tpop),  
+                    data = sea.tracts, 
+                    listw = seaw, etype='emixed') 
+
+summary(reg5)
+
+
+```
+
+$\lambda$ is the multiplier on the residuals. If there is a higher unexplained value for the y variable in a neighboring, that increases/decreases our residual for our y variable. 
+
+The total of the direct and indirect effect is different from the sum of them because of the error structure. If the direct effect is significant, there is an effect of my independent variable in my dependent variable. If the indirect effect is significant, there is an effect of the independent variable of my neighbor in my dependent variable. 
+
+```{r, warning=FALSE, eval=FALSE}
+
+
+summary(impacts(reg5, listw=seaw), zstats=TRUE)
+
+
+```
+
+
+### Manski model {-}
+
+Includes everything.
+
+$$\begin{split}
+y&=\rho Wy+X\beta+WX\theta+u\\\\
+u&=\lambda Wu+\varepsilon
+\end{split}$$
+
+```{r, warning=FALSE, eval=FALSE}
+
+reg7<-sacsarlm(DEP_CrudePrev ~ unempr + pmob+ pcol + ppov + pnhblk  + 
+                      phisp + log(tpop),  
+                    data = sea.tracts, 
+                    listw = seaw, type='sacmixed') 
+
+summary(reg7)
+
+
+```
+
+### SARAR model (Kelejian-Prucha) (SAC) (Cliff-Ord) {-}
+
+Includes the error multiplier and the effects that the y variable in my neighbors have in me. It does not include the lags of the X's.
+
+$$\begin{split}
+y&=\rho Wy+X\beta+u\\\\
+u&=\lambda Wu+\varepsilon
+\end{split}$$
+
+
+```{r, warning=FALSE, eval=FALSE}
+
+reg8<-sacsarlm(DEP_CrudePrev ~ unempr + pmob+ pcol + ppov + pnhblk  + 
+                      phisp + log(tpop),  
+                    data = sea.tracts, 
+                    listw = seaw, type='sac') 
+
+summary(reg8)
+
+
+```
+
+$\rho$ tells us the lag y and $\lambda$ the lag error. 
+
+
+## Which model is the best? {-}
+
+Is it a global or local model? Start with SDM (global) or SDEM (local). There is no easy way to compare global models and local models. 
+
+After answering the above, a likelihood ratio test can suggest if it is better a nested (restricted) or an unnested model (unrrestricted). Should we simplify the model? You can't compare two unrestricted models with this test!!! Use information criteria.
+
+### For Global {-}
+
+- SDM
+
+- SLX
+
+- SAR
+
+- SEM
+
+- OLS
+
+The null hypothesis is that the model should be restricted, i.e. the restricted coefficients are 0.
+
+The order of the arguments in the `LR.Sarlm()` function is not important to the result interpretation.
+
+```{r, warning=FALSE, eval=FALSE}
+
+LR.Sarlm(reg6, reg2)
+
+```
+The p-value suggest the null hypothesis should be rejected. SDM model should not be restricted, comparing to the SLX.
+
+The corresponding test to compare each of the models follows.
+
+### For Local {-}
+
+- SDEM
+
+- SEM
+
+- SLX
+
+- OLS
+
+The null hypothesis is that the model should be restricted, i.e. the restricted coefficients are 0.
+
+The order of the arguments in the `LR.Sarlm()` function is not important to the result interpretation.
+
+```{r, warning=FALSE, eval=FALSE}
+
+LR.Sarlm(reg5, fit.err)
+
+```
+
+A p-value near to 0 suggest that the null hypothesis is rejected. The non-restricted model is better. SDEM model should be used over the SEM.
+
+The degrees of freedom are how many coefficients we are restricting to 0. So it should be equal to the number of lagged independent variables. 
+
+
+```{r, warning=FALSE, eval=FALSE}
+
+LR.Sarlm(reg5, reg2)
+
+```
+
+Given the p-value, the SDEM model should not be restricted to the SLX.
+
+
+### Other {-}
+
+- SARAR
+
+- SEM
+
+- SAR
+
+- OLS
+
+
+## Heteroskedasticity {-}
+
+One last step before finishing. Do a spatial Breusch-Pagan test.
+
+The null hypothesis is the presence of heteroskedasticity.
+
+```{r, warning=FALSE, eval=FALSE}
+
+bptest.Sarlm(reg5, studentize=TRUE)
+
+```
+In the presence of heteroskedasticity, the advise is that the p-values are going to be affected, affecting the standard error, but not the coefficients. Probably, it is not going to cause the p-values to be far enough to be concerned. Still, be careful if the p-values are too near the threshold of 0.1, 0.05 or 0.01, depending on what is the confidence interval used. 
+
+
+

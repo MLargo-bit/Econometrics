@@ -1,0 +1,39 @@
+p.caption {
+  color: #777;
+  margin-top: 10px;
+}
+p code {
+  white-space: inherit;
+}
+pre {
+  word-break: normal;
+  word-wrap: normal;
+}
+pre code {
+  white-space: inherit;
+}
+
+
+/* Highlights*/
+
+  /* Definitions*/
+defi {
+  background-color: yellow
+}
+  /* Key Words*/
+key {
+  background-color: lightgreen
+}
+  /* Formulas*/
+eq {
+  background-color: orange
+}
+  /* Names*/
+nam {
+  background-color: pink
+}
+  /* Proofs*/
+proofs {
+  background-color: lightblue
+}
+

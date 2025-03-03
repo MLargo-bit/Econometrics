@@ -1,0 +1,157 @@
+# Econometrics {#intro}
+
+- `r ifelse(knitr::is_html_output(), print("<defi>Econometrics</defi>"), print("\\defi{Econometrics}"))`: Using statistical methods for estimating relationships in economics. It can be used to forecast and policy evaluation.
+
+
+  - It uses `r ifelse(knitr::is_html_output(), print("<key>empirical data</key>"), print("\\key{empirical data}"))` to test assumptions, relationships and theories.
+  
+
+
+
+## How to start? {-}
+
+- What is the question of interest?
+
+- An `r ifelse(knitr::is_html_output(), print("<key>economic model</key>"), print("\\key{economic model}"))` may be needed to test economic theories; they are equations stating the relationship you are looking for. It determines the variables that should be included. Intuition can be also a starting point:
+    
+  - The relationship between wages and years of education: $wages=f(y\_educ)$. It is expected that years of education increase wages.
+  
+- The `r ifelse(knitr::is_html_output(), print("<key>econometric model</key>"), print("\\key{econometric model}"))` specify the function of the economic model: Wages depend on the years of education and a term u.
+
+$$wages=\beta_0+\beta_1y\_educ+u$$
+
+- However, not every factor that affects wages can be observed or measured. The term `r ifelse(knitr::is_html_output(), print("<key>u</key>"), print("\\key{u}"))` represent such unobserved factors, and the measuring error of the included variables. It can never be eliminated entirely. It is also called `r ifelse(knitr::is_html_output(), print("<key>error term</key>"), print("\\key{error term}"))` or `r ifelse(knitr::is_html_output(), print("<key>disturbance</key>"), print("\\key{disturbance}"))`
+
+- $\beta_n$ are the `r ifelse(knitr::is_html_output(), print("<key>parameters</key>"), print("\\key{parameters}"))`. They give information about the relationship between the independent and dependent variable.
+
+- After establishing the econometric model, we can start doing hypothesis about the parameters. Is the relationship positive, negative or zero?
+
+- Then, data is required to estimate the parameters of the established model. There are different types of data structures:
+
+### Cross-Sectional Data {-}
+
+A Sample of variety of units taken in a point in time. Minor timing differences in collecting the data are ignored. In these kinds of data, the order of the observations doesn't matter.
+
+`r ifelse(knitr::is_html_output(), print("<key>Random sampling</key>"), print("\\key{Random Sampling}"))` is needed to get better results. It means the observations drawed are independent. However, it is not always appropriate to make this assumption. Later we will understand that this aspect is important to hold the ceteris paribus assumption and establish a relationship between the variables, given everything else is constant. `r ifelse(knitr::is_html_output(), print("<key>Random sampling</key>"), print("\\key{Random Sampling}"))` is violated when population is not large enough, so the observations are not independent draws. It those cases, the same methodology has to be refined. In some cases, `r ifelse(knitr::is_html_output(), print("<key>Random sampling</key>"), print("\\key{Random Sampling}"))` can be checked if the descriptive statistics are `r ifelse(knitr::is_html_output(), print("<key>balanced</key>"), print("\\key{balanced}"))`; for example, if we are making a comparison between women and men, the sample should be compound 50\% women and 50\% men, approximately. 
+
+An example of `r ifelse(knitr::is_html_output(), print("<key>cross-sectional data</key>"), print("\\key{cross-sectional data}"))` using **dplyr** package [@dplyr] is shown below:
+
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE}
+
+library(dplyr)
+
+data(starwars)
+
+starwars
+
+```
+
+
+Some variables can correspond to a different time period, but have a relationship with the dependent variable, so they must be included. That is not going to lead to special problems in the analysis of the data.
+
+
+Chapter \@ref(crossec) will focus on the analysis of these type of data.
+
+
+### Time series data {-}
+
+- This type of data consist on a variable or plenty variables over time. Past events can influence the future. That is the expected behavior of series like stocks or GDP.
+
+- Unlike in cross-sectional data, time series data order matters: the chronology of events holds important information for the analysis. Even lags can hold useful information.
+
+- Observations rarely can be assumed to be independent across time. 
+
+- Cross-section methodologies can be used in time series; however, due to the nature of time series, like trends, modifications have been made in order to study time series. 
+
+- `r ifelse(knitr::is_html_output(), print("<key>Data frequency</key>"), print("\\key{Data frequency}"))` is one of the characteristics of the data collected in time series. The most common ones are daily, weekly, monthly and annually.
+
+- An example of a time series from the **datasets** package [@datasets] is displayed below:
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE}
+
+
+data(AirPassengers)
+
+AirPassengers
+
+```
+
+- Another characteristic of time series is `r ifelse(knitr::is_html_output(), print("<key>seasonality</key>"), print("\\key{seasonality}"))`. It shows effects like the weather. 
+
+### Pooled Cross Sections {-}
+
+- Cross-section and time series features.
+
+- For example, a survey conducted in different years to different random samples.
+
+- It helps analyzing the effects of policies, having measured the variables before and after it was implemented. 
+
+- The order of the data is not important. However, corresponding year of the information should be tracked.
+
+- The analysis is similar to the cross section data. Although, it is important to account for secular differences in the variables. 
+
+- How a key relationship has changed over time?
+
+- Below there is an example of these type of data:
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE}
+
+set.seed(123)
+
+df<-data.frame(observation=seq(from=1, to = 500),
+               year=c(rep(2022,250),rep(2023,250)),
+               price=sample(rnorm(4, mean=100000, sd=50000),500, replace=T),
+               income=sample(rnorm(4, mean=70000, sd=5000),500, replace=T))
+  
+
+head(df)
+tail(df)
+
+```
+
+
+
+### Panel or Longitudinal Data {-}
+
+- Every cross-sectional observation is a time series.
+
+- The `r ifelse(knitr::is_html_output(), print("<key>same</key>"), print("\\key{same}"))` individuals are tracked in time, unlike in pooled cross-section data. The same units are included.
+
+- An example is provided using the **gapminder** package [@gapminder]
+
+```{r,  echo=FALSE, warning=FALSE, message=FALSE}
+
+library(gapminder)
+
+head(gapminder)
+
+```
+
+- An advantage of these type of data is that having the same observations in time makes it possible to control by unobserved characteristics of the individuals. 
+
+  - We are comparing the same individuals over time, so their unobserved characteristics are 'included' in the analysis.
+  
+  - It can facilitate causal inference having more than one observation. 
+  
+  - The behavior of lags can be studied to look for the effects of a policy after a time has passed.
+
+
+## {-}
+
+
+Without the `r ifelse(knitr::is_html_output(), print("<key>ceteris paribus</key>"), print("\\key{ceteris paribus}"))` assumption, the `r ifelse(knitr::is_html_output(), print("<key>causal effect</key>"), print("\\key{causal effect}"))` that we are looking for is still unknown. Holding the other variables fixed is crucial to determine the link between an independent variable and the dependent variable. To compare between two potential outcomes for the same individual is called `r ifelse(knitr::is_html_output(), print("<key>counterfactual outcomes</key>"), print("\\key{counterfactual outcomes}"))`. We are considering the change in the outcome given a change in a single variable, everything else constant. The idea is to compare two different states of the world.
+  
+Remember that experimental data has different characteristics than the available data [@wooldridge1996introductory]. The ideal would be to compare all the possible scenarios for the same individual, and get the estimates that way. That is not possible, as  from all the potential outcomes, only one is observable. To establish causal relationships between non-experimental data is then, a challenge.
+
+For practical aspects, `r ifelse(knitr::is_html_output(), print("<key>randomization</key>"), print("\\key{randomization}"))` can solve some of the not observable variables that are not taken into account, as a good random selection avoid `r ifelse(knitr::is_html_output(), print("<key>selection bias</key>"), print("\\key{selection bias}"))`. For example, an experiment on how the amount of fertilizer affects yield productivity can be run, as long as the amount of fertilizer was randomly assigned to the land in the experiment. Otherwise, `r ifelse(knitr::is_html_output(), print("<key>selection bias</key>"), print("\\key{selection bias}"))`, as for example, yields near to the river got more fertilizer than dryer areas. `r ifelse(knitr::is_html_output(), print("<key>Randomization</key>"), print("\\key{Randomization}"))` helps the ceteris paribus assumption to hold. If randomization is not done, the relationship between the factors might be spurious. 
+
+Even though many topics are interesting to run an experiment, not everything should be done, given costs and ethical issues [@wooldridge1996introductory]. Then, nonexperimental data can be collected; that means, data that exist but wasn't collected just to run the experiment. Data usually comes from surveys, as Census. 
+
+Omitted factors that are relevant to establish a relationship with the independent variable are a known issue. As a matter of fact, not all the determinants of wages are easy to quantify, making the analysis more complex. Even though education can be considered an observed variable (you have a degree that guarantees you finished school), others are not quite obvious, like talents, gifts or innate abilities [@wooldridge1996introductory]. Not including factors that are related can create bias in the relationship between the included variables. For example, the relation between education level and income can be negative if we are missing to add something to the model. If the omitted variable can be observed, adding it should solve the problem. However, if that is not the case and the variable can't be easily measured, we can have an issue. 
+
+To quantify the effects between two variables, problems inferring causality can arise. @wooldridge1996introductory mentions the relationship between the minimum wage and unemployment. We can easily imply that these wages have impacts on other variables that also affect unemployment. Even considering these as time series, if other factors are controlled, the ceteris paribus assumption can still hold.
+
+  
+
+
