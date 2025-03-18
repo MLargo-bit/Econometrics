@@ -53,6 +53,6 @@ Given $x$ and $y$ variables related, we can say $y$ is a `r ifelse(knitr::is_htm
 
 $$y=\beta_0+\beta_1x$$
 
-The change in $y$ is $\beta_1$ times the change in $x$. The `r ifelse(knitr::is_html_output(), print("<key>marginal effect</key>"), print("\\key{marginal effect}"))` of $x$ on $y$is constant and equal to $\beta_1$.
+The change in $y$ is $\beta_1$ times the change in $x$. The `r ifelse(knitr::is_html_output(), print("<key>marginal effect</key>"), print("\\key{marginal effect}"))` of $x$ on $y$ is constant and equal to $\beta_1$.
 
 
