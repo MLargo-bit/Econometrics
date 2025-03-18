@@ -11,9 +11,8 @@ preview-book
 intro
 crossec
 spatial
-footnotes-and-citations
-footnotes
-citations
+math-review
+linear-functions
 blocks
 equations
 theorems-and-proofs

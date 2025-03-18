@@ -28,5 +28,31 @@ For a set of $n$ pair of numbers $\left\{(x_i,y_i):i=1,2...,n\right\}$ and const
 $$\sum_{i=1}^n(ax_i+by_i)=a\sum_{i=1}^nx_i+b\sum_{i=1}^ny_i$$
 
 $$\sum_{i=1}^n(x_i/y_i)\neq \left(\sum_{i=1}^nx_i \right) / \left(\sum_{i=1}^ny_i \right)$$
+The sample average is an example of a `r ifelse(knitr::is_html_output(), print("<key>descriptive statistic</key>"), print("\\key{descriptive statistic}"))`. In this case, the mean describes the central tendency of a set of points:
+
+$$\bar{x} = (1/n)\sum_{i=1}^{n}x_i$$
+Some basic properties about the averages or means:
+
+- The sum of the deviations is always zero - $d$ stands for deviation:
+
+$$\sum_{i=1}^{n}d_i = \sum_{i=1}^{n}(x_i-\bar{x})=0$$
+
+- The sum of squared deviations is the sum of the squared $x_i$ minus $n$ times the square of $\bar{x}$.
+
+$$\sum_{i=1}^{n}(x_i-\bar{x})^2=\sum_{i=1}^nx^2_i-n(\bar{x})^2$$
+The `r ifelse(knitr::is_html_output(), print("<key>median</key>"), print("\\key{median}"))` can be obtained ordering the values from smallest to largest. If the $n$ number of observations is odd, the sample median is the middle number of the ordered values.
+
+If $n$ is even, the median is usually defined as the average of the two middle values (after ordering them).
+
+The median is usually less sensitive to extreme values than the average. 
+
+## Linear Functions
+
+
+Given $x$ and $y$ variables related, we can say $y$ is a `r ifelse(knitr::is_html_output(), print("<key>linear function</key>"), print("\\key{linear function}"))` of $x$ and the $\beta$'s are describing that relationship.
+
+$$y=\beta_0+\beta_1x$$
+
+The change in $y$ is $\beta_1$ times the change in $x$. The `r ifelse(knitr::is_html_output(), print("<key>marginal effect</key>"), print("\\key{marginal effect}"))` of $x$ on $y$ is constant and equal to $\beta_1$.
 
 

@@ -29,7 +29,7 @@ set in the _output.yml file.</p>" />
 <meta name="author" content="Mimi" />
 
 
-<meta name="date" content="2024-11-19" />
+<meta name="date" content="2025-03-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -78,8 +78,9 @@ set in the _output.yml file.</p>" />
 
 
 <style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -89,7 +90,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -206,6 +207,7 @@ div.csl-indent {
 <li class="chapter" data-level="2" data-path="crossec.html"><a href="crossec.html"><i class="fa fa-check"></i><b>2</b> Cross-Sectional Data</a>
 <ul>
 <li class="chapter" data-level="" data-path="crossec.html"><a href="crossec.html#simple-regression-model"><i class="fa fa-check"></i>Simple Regression Model</a></li>
+<li class="chapter" data-level="" data-path="crossec.html"><a href="crossec.html#ordinary-least-squares-ols"><i class="fa fa-check"></i>Ordinary Least Squares (OLS)</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>3</b> Spatial Econometrics</a>
 <ul>
@@ -245,10 +247,15 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="" data-path="spatial.html"><a href="spatial.html#heteroskedasticity"><i class="fa fa-check"></i>Heteroskedasticity</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html"><i class="fa fa-check"></i><b>4</b> Footnotes and citations</a>
+<li class="chapter" data-level="4" data-path="math-review.html"><a href="math-review.html"><i class="fa fa-check"></i><b>4</b> Math Review</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#footnotes"><i class="fa fa-check"></i><b>4.1</b> Footnotes</a></li>
-<li class="chapter" data-level="4.2" data-path="footnotes-and-citations.html"><a href="footnotes-and-citations.html#citations"><i class="fa fa-check"></i><b>4.2</b> Citations</a></li>
+<li class="chapter" data-level="" data-path="math-review.html"><a href="math-review.html#summation"><i class="fa fa-check"></i>Summation</a>
+<ul>
+<li class="chapter" data-level="" data-path="math-review.html"><a href="math-review.html#property-1"><i class="fa fa-check"></i>Property 1</a></li>
+<li class="chapter" data-level="" data-path="math-review.html"><a href="math-review.html#property-2"><i class="fa fa-check"></i>Property 2</a></li>
+<li class="chapter" data-level="" data-path="math-review.html"><a href="math-review.html#property-3"><i class="fa fa-check"></i>Property 3</a></li>
+</ul></li>
+<li class="chapter" data-level="4.1" data-path="math-review.html"><a href="math-review.html#linear-functions"><i class="fa fa-check"></i><b>4.1</b> Linear Functions</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="blocks.html"><a href="blocks.html"><i class="fa fa-check"></i><b>5</b> Blocks</a>
 <ul>
@@ -311,13 +318,18 @@ E(u|y)=\beta_0+\beta_1x
 \tag{2.3}
 \end{equation}\]</span></p>
 <p>The <key>PRF</key> is a linear function of <span class="math inline">\(x\)</span>, meaning that an increase in one-unit in <span class="math inline">\(x\)</span> changes the expected value of <span class="math inline">\(y\)</span> by <span class="math inline">\(\beta_1\)</span>. For any given value of <span class="math inline">\(x\)</span>, the distribution of <span class="math inline">\(y\)</span> is centered about <span class="math inline">\(E(y|x)\)</span> (see Figure <a href="crossec.html#fig:prf">2.1</a>, taken from <span class="citation">Wooldridge (<a href="#ref-wooldridge1996introductory">2016</a>)</span>)</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="crossec.html#cb8-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;./02-cross-sec/PRF.png&quot;</span>)</span></code></pre></div>
 <div class="figure"><span style="display:block;" id="fig:prf"></span>
 <img src="02-cross-sec/PRF.png" alt="Population Regression Function" width="576" />
 <p class="caption">
 Figure 2.1: Population Regression Function
 </p>
 </div>
+<p>Equation <a href="crossec.html#eq:prf">(2.3)</a> is often called the <key>systematic part</key> of <span class="math inline">\(y\)</span> as it is the part of <span class="math inline">\(y\)</span> explained by <span class="math inline">\(x\)</span>, while <span class="math inline">\(u\)</span> can be called the <key>unsystematic part</key>, or the part of <span class="math inline">\(y\)</span> not explained by <span class="math inline">\(x\)</span>.</p>
+</div>
+<div id="ordinary-least-squares-ols" class="section level2 unnumbered hasAnchor">
+<h2>Ordinary Least Squares (OLS)<a href="crossec.html#ordinary-least-squares-ols" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To estimate the parameters, a sample is needed. The data collected can be written for every observation <span class="math inline">\(i\)</span> as:</p>
+<p><span class="math display">\[y_i=\beta_0+\beta_1x_i+u_i\]</span></p>
 
 </div>
 </div>
