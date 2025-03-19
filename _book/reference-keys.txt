@@ -13,6 +13,8 @@ crossec
 spatial
 math-review
 linear-functions
+one-variable
+more-than-one-variable
 blocks
 equations
 theorems-and-proofs
