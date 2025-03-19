@@ -48,6 +48,7 @@ The median is usually less sensitive to extreme values than the average.
 
 ## Linear Functions
 
+### One variable
 
 Given $x$ and $y$ variables related, we can say $y$ is a `r ifelse(knitr::is_html_output(), print("<key>linear function</key>"), print("\\key{linear function}"))` of $x$ and the $\beta$'s are describing that relationship.
 
@@ -55,4 +56,22 @@ $$y=\beta_0+\beta_1x$$
 
 The change in $y$ is $\beta_1$ times the change in $x$. The `r ifelse(knitr::is_html_output(), print("<key>marginal effect</key>"), print("\\key{marginal effect}"))` of $x$ on $y$ is constant and equal to $\beta_1$.
 
+In some cases, a linear function does not describe the relationship between $x$ and $y$ properly between a range of $x$. For example, low levels of income and housing expenditure, as explained in @wooldridge1996introductory. In those cases, other type of functions are required.
 
+In a linear model, the `r ifelse(knitr::is_html_output(), print("<key>marginal propensity to consume, MPC</key>"), print("\\key{marginal propensity to consume, MPC}"))` of $y$ (housing) out of $x$ (income) is $\beta_1$.
+
+The `r ifelse(knitr::is_html_output(), print("<key>average propensity to consume, APC</key>"), print("\\key{average propensity to consume, APC}"))` is:
+
+$$\frac{y}{x} = \frac{\beta_0+\beta_1x}{x}$$
+
+- In linear models the APC is not constant.
+
+- The APC is always greater than the MPC, but it gets closer to it when $x$ increases.
+
+### More than one variable
+
+$y$ is linearly related to $x_1$ and $x_2$:
+
+$$y = \beta_0 + \beta_1x_1 + \beta_2x_2$$
+
+This time, the particular slopes $\beta_1$ and $\beta_2$ measure the `r ifelse(knitr::is_html_output(), print("<key>partial effect</key>"), print("\\key{partial effect}"))` of the independent variable and $y$.
