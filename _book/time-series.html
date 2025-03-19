@@ -4,13 +4,13 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | Econometrics</title>
+  <title>Chapter 4 Time Series | Econometrics</title>
   <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
 set in the _output.yml file.</p>" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | Econometrics" />
+  <meta property="og:title" content="Chapter 4 Time Series | Econometrics" />
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
@@ -19,7 +19,7 @@ set in the _output.yml file.</p>" />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | Econometrics" />
+  <meta name="twitter:title" content="Chapter 4 Time Series | Econometrics" />
   
   <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
 The HTML output format for this example is bookdown::gitbook,
@@ -36,8 +36,8 @@ set in the _output.yml file.</p>" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-
+<link rel="prev" href="crossec.html"/>
+<link rel="next" href="spatial.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -286,19 +286,117 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="time-series" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Time Series<a href="time-series.html#time-series" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Most of the notes here come from <span class="citation">Wooldridge (<a href="#ref-wooldridge1996introductory">2016</a>)</span>.</p>
+<p>Applying OLS method to time series requieres special attention.</p>
+<p>Often, these models violate the Gauss-Markov assumptions.</p>
+<p>We can no longer assume random sampling.</p>
+<div id="characteristics" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Characteristics<a href="time-series.html#characteristics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In time series, there is temporal ordering. That means the past can affect the future, but not the other way round.</p>
+<p>The observed data is only one possible outcome of the <key>stochastic process</key>. These is also called <em>realizations</em> of the time series process. It is not possible to observe other value, since history cannot be changed. However, the existance of an <key>stochastic process</key> suggest that if events had been different, a different <em>realization</em> would have been obtained. That is why time series can be think of as the outcome of random variables.</p>
+<p>All possible realizations of an <key>stochastic process</key> are the total population in cross-sectional data, while the sample size is the number of periods over the observed variables.</p>
+</div>
+<div id="static-models" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Static models<a href="time-series.html#static-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>All variables are dated contemporaneously:</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1x_t + u_t \text{, t = 1,2,...,n}\]</span></p>
+<p>This kind of model is used if it is believed that <span class="math inline">\(x\)</span> has an immediate effect on <span class="math inline">\(y\)</span>.</p>
+</div>
+<div id="finite-distributed-lag-models-fdl" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Finite Distributed Lag Models (FDL)<a href="time-series.html#finite-distributed-lag-models-fdl" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Some variables are allowed to affect <span class="math inline">\(y\)</span> with a lag.</p>
+<p><span class="math display" id="eq:FDL2">\[\begin{equation}
+y_t=\alpha+\beta_0x_t+\beta_1x_{t-1}+\beta_2x_{t-2}+u_t
+\tag{4.1}
+\end{equation}\]</span></p>
+<p>Equation <a href="time-series.html#eq:FDL2">(4.1)</a> is an FDL of order two, since the lags of the <span class="math inline">\(x\)</span> variable are included from two periods before.</p>
+<div id="temporal-increase" class="section level3 hasAnchor" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Temporal increase<a href="time-series.html#temporal-increase" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Imagine <span class="math inline">\(x\)</span> increases in one unit at time <span class="math inline">\(t\)</span>, but goes back to its previos value after and the stochastic process is described as in Equation <a href="time-series.html#eq:FDL2">(4.1)</a>.</p>
+<p><span class="math inline">\(\beta_0\)</span> is the immediate change in <span class="math inline">\(y_t\)</span> due to a temporal increase of one unit in <span class="math inline">\(x\)</span>. All happening at time <span class="math inline">\(t\)</span>. (<span class="math inline">\(y_t-y_{t-1}=\beta_0\)</span>, assuming <span class="math inline">\(x\)</span> is a constant (ceteris paribus) in every period except in <span class="math inline">\(t\)</span>, where it is <span class="math inline">\(x+1\)</span>).</p>
+<p><span class="math inline">\(\beta_0\)</span> can be called the <key>impact multiplier</key>. It is the change <span class="math inline">\(y\)</span> one period after the change.</p>
+<p><span class="math inline">\(\beta_2\)</span> is the change in <span class="math inline">\(y\)</span> two periods after the change, as figure <a href="time-series.html#fig:changes">4.1</a> implies. However, as lags from three periods ago were not included, at time <span class="math inline">\(t+3\)</span>, <span class="math inline">\(y\)</span> has reverted back to its initial level of all constants. Remember this was just a temporary increase.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="time-series.html#cb1-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;./03-time-ser/changes.png&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:changes"></span>
+<img src="03-time-ser/changes.png" alt="Laged parameters" width="182" />
+<p class="caption">
+Figure 4.1: Laged parameters
+</p>
+</div>
+</div>
+<div id="permanent-increase" class="section level3 hasAnchor" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> Permanent increase<a href="time-series.html#permanent-increase" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This time, <span class="math inline">\(x\)</span> will change at period <span class="math inline">\(t\)</span>, without going back to its previos value.</p>
+<p>The immediate change in this situation is the same as in the temporal increase. Things change for periods greater than <span class="math inline">\(t\)</span>. Considering Equation <a href="time-series.html#eq:FDL2">(4.1)</a>, after one period, <span class="math inline">\(y\)</span> is going to increase <span class="math inline">\(\beta_0+\beta_1\)</span> and <span class="math inline">\(\beta+0+\beta_1+\beta_2\)</span> after two periods. Considering it is a second order FDL, there are no further changes after two periods. Then, that makes <span class="math inline">\(\beta+0+\beta_1+\beta_2\)</span> the <key>long-run multiplier</key>.</p>
+<p>For a horizon <span class="math inline">\(h\)</span>, the <key>cumulative effect</key> can be defined as the sum of the coefficients: <span class="math inline">\(\beta_0+\beta_1+\beta_2+...+\beta_h\)</span>. It is the expected change in the outcome after <span class="math inline">\(h\)</span> periods after a permanent change in one unit increase in <span class="math inline">\(x\)</span>.</p>
+<p>Correlation between the <span class="math inline">\(x\)</span> and its lag values is expected (implying multicollinearity) it can be challenging to get accurate estimates of each <span class="math inline">\(\beta\)</span> parameter.</p>
+</div>
+</div>
+<div id="ols-properties" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> OLS properties<a href="time-series.html#ols-properties" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>If assumptions explaned in sections <a href="time-series.html#t1">4.4.1.1</a>, <a href="time-series.html#t2">4.4.1.2</a>, <a href="time-series.html#t3">4.4.1.3</a>, <a href="time-series.html#t4">4.4.2.1</a> and <a href="time-series.html#t5">4.4.2.2</a> of the Gauss-Markov theorem, we have that:</p>
+<ol style="list-style-type: decimal">
+<li>The variance of <span class="math inline">\(\hat{\beta_j}\)</span> conditional on X is</li>
+</ol>
+<p><span class="math display">\[Var(\hat{\beta_j}|X = \frac{\sigma^2}{SST_j(1-R_j^2)}), j=1,...,k\]</span></p>
+<div id="unbiased-estimators" class="section level3 hasAnchor" number="4.4.1">
+<h3><span class="header-section-number">4.4.1</span> Unbiased estimators<a href="time-series.html#unbiased-estimators" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math display">\[E(\hat{\beta_j}) = \beta_j\]</span></p>
+<p>The expected value of the estimated parameter is the actual parameter.</p>
+<div id="t1" class="section level4 hasAnchor" number="4.4.1.1">
+<h4><span class="header-section-number">4.4.1.1</span> Linear Parameters<a href="time-series.html#t1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The time series follows a model that is linear in its parameters:</p>
+<p><span class="math display">\[y_t = \beta_0 + \beta_1x_t+...+\beta_kx_{tk}+u_t\]</span></p>
+</div>
+<div id="t2" class="section level4 hasAnchor" number="4.4.1.2">
+<h4><span class="header-section-number">4.4.1.2</span> No perfect Collinearity<a href="time-series.html#t2" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>No independent variable is constant nor a perfect linear combination of the others.</p>
+</div>
+<div id="t3" class="section level4 hasAnchor" number="4.4.1.3">
+<h4><span class="header-section-number">4.4.1.3</span> Zero conditional mean<a href="time-series.html#t3" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>For each <span class="math inline">\(t\)</span>, the expected value of the error <span class="math inline">\(u_t\)</span> given the explanatory variables for all time periods, is zero.</p>
+<p><span class="math display">\[E(u_t|X) = 0,\text{ t}=1,2,...,n\]</span></p>
+<p>The above meaning the error term and the independent variables are not correlated in any time period.</p>
+<p>If the expected value of the error given the X’s in a time <span class="math inline">\(t\)</span> is zero, this implies the X’s are <key>contemporaneously exogenous</key>.</p>
+<p>When the expected value of the error given the X’s is zero for all <span class="math inline">\(t\)</span>, that implies the X’s are <key>strictly exogenous</key>.</p>
+<p>This also means there is no restriction on correlation in the independent variables or the errors accross time.</p>
+<p>In practice, holding strict exogeneity can be unrealistic.</p>
+</div>
+</div>
+<div id="minimum-variance-of-estimators" class="section level3 hasAnchor" number="4.4.2">
+<h3><span class="header-section-number">4.4.2</span> Minimum variance of estimators<a href="time-series.html#minimum-variance-of-estimators" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="t4" class="section level4 hasAnchor" number="4.4.2.1">
+<h4><span class="header-section-number">4.4.2.1</span> Homoskedasticity<a href="time-series.html#t4" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The conditional variance of the error term given X is constant.</p>
+<p><span class="math display">\[Var(u_t|X)=Var(u_t)\]</span></p>
+<p>If this doesn’t hold, the errors are heteroskedastic.</p>
+</div>
+<div id="t5" class="section level4 hasAnchor" number="4.4.2.2">
+<h4><span class="header-section-number">4.4.2.2</span> No serial Correlation<a href="time-series.html#t5" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The autocorrelation of the error conditional to X is zero for all different t.</p>
+<p><span class="math display">\[Corr(u_t, u_s|X)=0, \text{ for all} t \neq s\]</span></p>
+<p>When this false, the errors are <key>autocorrelated</key>.</p>
+<p>The presence of <key>autocorrelation</key> in the errors means that if <span class="math inline">\(y\)</span> is unexpectedly high for this period, then it is likely to be above average in the next period too. In many applications, this is reasonable to assume.</p>
+
+</div>
+</div>
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-wooldridge1996introductory" class="csl-entry">
+Wooldridge, Jeffrey M. 2016. <span>“Introductory Econometrics: A Modern Approach 7th Ed.”</span>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-
+<a href="crossec.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="spatial.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -329,7 +427,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/%s",
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-time-ser.Rmd",
 "text": "Edit"
 },
 "history": {

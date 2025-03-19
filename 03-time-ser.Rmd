@@ -1,0 +1,142 @@
+# Time Series
+
+Most of the notes here come from @wooldridge1996introductory.
+
+Applying OLS method to time series requieres special attention.
+
+Often, these models violate the Gauss-Markov assumptions.
+
+We can no longer assume random sampling.
+
+## Characteristics
+
+In time series, there is temporal ordering. That means the past can affect the future, but not the other way round. 
+
+The observed data is only one possible outcome of the `r ifelse(knitr::is_html_output(), print("<key>stochastic process</key>"), print("\\key{stochastic process}"))`. These is also called *realizations* of the time series process. It is not possible to observe other value, since history cannot be changed. However, the existance of an `r ifelse(knitr::is_html_output(), print("<key>stochastic process</key>"), print("\\key{stochastic process}"))` suggest that if events had been different, a different *realization* would have been obtained. That is why time series can be think of as the outcome of random variables.
+
+All possible realizations of an `r ifelse(knitr::is_html_output(), print("<key>stochastic process</key>"), print("\\key{stochastic process}"))` are the total population in cross-sectional data, while the sample size is the number of periods over the observed variables.
+
+
+## Static models
+
+All variables are dated contemporaneously:
+
+$$y_i = \beta_0 + \beta_1x_t + u_t \text{, t = 1,2,...,n}$$
+
+This kind of model is used if it is believed that $x$ has an immediate effect on $y$.
+
+## Finite Distributed Lag Models (FDL)
+
+Some variables are allowed to affect $y$ with a lag.
+
+\begin{equation}
+y_t=\alpha+\beta_0x_t+\beta_1x_{t-1}+\beta_2x_{t-2}+u_t
+(\#eq:FDL2)
+\end{equation} 
+
+Equation \@ref(eq:FDL2) is an FDL of order two, since the lags of the $x$ variable are included from two periods before.
+
+### Temporal increase
+
+Imagine $x$ increases in one unit at time $t$, but goes back to its previos value after and the stochastic process is described as in Equation \@ref(eq:FDL2).
+
+$\beta_0$ is the immediate change in $y_t$ due to a temporal increase of one unit in $x$. All happening at time $t$. ($y_t-y_{t-1}=\beta_0$, assuming $x$ is a constant (ceteris paribus) in every period except in $t$, where it is $x+1$).
+
+$\beta_0$ can be called the `r ifelse(knitr::is_html_output(), print("<key>impact multiplier</key>"), print("\\key{impact multiplier}"))`. It is the change $y$ one period after the change.
+
+$\beta_2$ is the change in $y$ two periods after the change, as figure \@ref(fig:changes) implies. However, as lags from three periods ago were not included, at time $t+3$, $y$ has reverted back to its initial level of all constants. Remember this was just a temporary increase.
+
+```{r changes, fig.cap='Laged parameters', fig.width=10}
+
+knitr::include_graphics("./03-time-ser/changes.png")
+
+```
+
+### Permanent increase
+
+This time, $x$ will change at period $t$, without going back to its previos value.
+
+The immediate change in this situation is the same as in the temporal increase. Things change for periods greater than $t$. Considering Equation \@ref(eq:FDL2), after one period, $y$ is going to increase $\beta_0+\beta_1$ and $\beta+0+\beta_1+\beta_2$ after two periods. Considering it is a second order FDL, there are no further changes after two periods. Then, that makes $\beta+0+\beta_1+\beta_2$ the `r ifelse(knitr::is_html_output(), print("<key>long-run multiplier</key>"), print("\\key{long-run multiplier}"))`.
+
+For a horizon $h$, the `r ifelse(knitr::is_html_output(), print("<key>cumulative effect</key>"), print("\\key{cumulative effect}"))` can be defined as the sum of the coefficients: $\beta_0+\beta_1+\beta_2+...+\beta_h$. It is the expected change in the outcome after $h$ periods after a permanent change in one unit increase in $x$.
+
+Correlation between the $x$ and its lag values is expected (implying multicollinearity) it can be challenging to get accurate estimates of each $\beta$ parameter.
+
+## OLS properties
+
+If assumptions explaned in sections \@ref(t1), \@ref(t2), \@ref(t3), \@ref(t4) and \@ref(t5) of the Gauss-Markov theorem, we have that:
+
+1. The variance of $\hat{\beta_j}$ conditional on X is
+
+$$Var(\hat{\beta_j}|X = \frac{\sigma^2}{SST_j(1-R_j^2)}), j=1,...,k$$
+
+    $SST_j$ is the total sum of squares of $x_{tj}$ and $R^2_j$ is the R-squared from the regression of $x_j$ on the other independent variables.
+
+2. $\hat{\sigma^2}=\frac{SSR}{n-k-1}$ is an unbiased estimator of $\hat{\sigma^2}$
+
+And then, the OLS estimators are the best linear unbiased estimators (BLUE) conditional on X.
+
+In order to make inference towards OLS estimators, section \@ref(t6) explains the assumption required.
+
+All six assumptions make the Classical Linear Model assumptions for time series, were the OLS estimators are normally distributed, conditional to X. $t$ statistic has a $t$ distribution and each $F$ statistic has an $F$ distribution.
+
+### Unbiased estimators
+
+$$E(\hat{\beta_j}) = \beta_j$$
+
+The expected value of the estimated parameter is the actual parameter.
+
+#### Linear Parameters {#t1}
+
+The time series follows a model that is linear in its parameters:
+
+$$y_t = \beta_0 + \beta_1x_t+...+\beta_kx_{tk}+u_t$$
+
+#### No perfect Collinearity {#t2}
+
+No independent variable is constant nor a perfect linear combination of the others.
+
+#### Zero conditional mean {#t3}
+
+For each $t$, the expected value of the error $u_t$ given the explanatory variables for all time periods, is zero.
+
+$$E(u_t|X) = 0,\text{ t}=1,2,...,n$$
+
+The above meaning the error term and the independent variables are not correlated in any time period.
+
+If the expected value of the error given the X's in a time $t$ is zero, this implies the X's are `r ifelse(knitr::is_html_output(), print("<key>contemporaneously exogenous</key>"), print("\\key{contemporaneously exogenous}"))`.
+
+When the expected value of the error given the X's is zero for all $t$, that implies the X's are  `r ifelse(knitr::is_html_output(), print("<key>strictly exogenous</key>"), print("\\key{strictly exogenous}"))`.
+
+This also means there is no restriction on correlation in the independent variables or the errors accross time.
+
+In practice, holding strict exogeneity can be unrealistic.
+
+### Minimum variance of estimators
+
+#### Homoskedasticity {#t4}
+
+The conditional variance of the error term given X is constant.
+
+$$Var(u_t|X)=Var(u_t)$$
+
+If this doesn't hold, the errors are heteroskedastic.
+
+#### No serial Correlation {#t5}
+
+The autocorrelation of the error conditional to X is zero for all different t.
+
+$$Corr(u_t, u_s|X)=0, \text{ for all} t \neq s$$
+
+When this false, the errors are `r ifelse(knitr::is_html_output(), print("<key>autocorrelated</key>"), print("\\key{autocorrelated}"))`.
+
+The presence of `r ifelse(knitr::is_html_output(), print("<key>autocorrelation</key>"), print("\\key{autocorrelation}"))` in the errors means that if $y$ is unexpectedly high for this period, then it is likely to be above average in the next period too. In many applications, this is reasonable to assume.
+
+### inference
+
+#### Normality {#t6}
+
+The errors are independent of X and are independently and identically distributed as Normal(0,$\sigma^2$).
+
+This implies assumptions in sections \@ref(t3), \@ref(t4) and \@ref(t5), but stronger.
+

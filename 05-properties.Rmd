@@ -74,4 +74,12 @@ $y$ is linearly related to $x_1$ and $x_2$:
 
 $$y = \beta_0 + \beta_1x_1 + \beta_2x_2$$
 
-This time, the particular slopes $\beta_1$ and $\beta_2$ measure the `r ifelse(knitr::is_html_output(), print("<key>partial effect</key>"), print("\\key{partial effect}"))` of the independent variable and $y$.
+This time, the particular slopes $\beta_1$ and $\beta_2$ measure the `r ifelse(knitr::is_html_output(), print("<key>partial effect</key>"), print("\\key{partial effect}"))` of the independent variable and $y$. That means other factors will remain constant or fixed, as the `r ifelse(knitr::is_html_output(), print("<key>ceteris paribus</key>"), print("\\key{ceteris paribus}"))` assumption requires.
+
+We have that:
+
+$$\delta y = \beta_1\delta x_1$$
+
+if $\delta x_2 = 0$
+
+PAGE 692
