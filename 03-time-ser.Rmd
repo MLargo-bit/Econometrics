@@ -132,7 +132,7 @@ When this false, the errors are `r ifelse(knitr::is_html_output(), print("<key>a
 
 The presence of `r ifelse(knitr::is_html_output(), print("<key>autocorrelation</key>"), print("\\key{autocorrelation}"))` in the errors means that if $y$ is unexpectedly high for this period, then it is likely to be above average in the next period too. In many applications, this is reasonable to assume.
 
-### inference
+### Inference
 
 #### Normality {#t6}
 
@@ -140,3 +140,20 @@ The errors are independent of X and are independently and identically distribute
 
 This implies assumptions in sections \@ref(t3), \@ref(t4) and \@ref(t5), but stronger.
 
+## Functional forms
+
+Natural logarithms are often used in time series regressions with constant percentage effects.
+
+If the model is a log-log, then the coefficient can be interpreted as the elasticity of $y$ with respect to $x$.
+
+Logartihms can be used in lag models. In a log-log, the `r ifelse(knitr::is_html_output(), print("<key>impact multiplier</key>"), print("\\key{impact multiplier}"))` $\beta_0$ is called `r ifelse(knitr::is_html_output(), print("<key>short-run elasticity</key>"), print("\\key{short-run elasticity}"))`. The `r ifelse(knitr::is_html_output(), print("<key>cumulative effect</key>"), print("\\key{cumulative effect}"))` is sometimes called `r ifelse(knitr::is_html_output(), print("<key>long-run elasticity, LRP</key>"), print("\\key{long-run elasticity, LRP}"))`, and measures the percentage increase in $y$ after $k$ periods, given a permanent increase of 1\% in $x$.
+
+When a lag of a variable is added to the model, we loose one observation. The lagged variables can be substantially correlated, creating a multicollinearity problem that makes difficult to estimate the effect of each lag. The joint significance given by the $F$ statistic tells if the variable is significant. However, it doesn't point out if it is the contemporaneous, a lagged one or all. Regressing the model using the LRP makes possible to estimate the standard error of the LRP estimate and determine if it is statistically different from zero, eventhough none of the coefficients is individually significant (refer to @wooldridge1996introductory, page 347).
+
+
+
+```{r LRP, fig.cap='LRP estimation, example', fig.width=10}
+
+knitr::include_graphics("./03-time-ser/LRP.png")
+
+```
