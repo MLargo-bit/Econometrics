@@ -29,7 +29,7 @@ set in the _output.yml file.</p>" />
 <meta name="author" content="Mimi" />
 
 
-<meta name="date" content="2025-03-19" />
+<meta name="date" content="2025-03-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -205,7 +205,10 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="4.4.1" data-path="time-series.html"><a href="time-series.html#unbiased-estimators"><i class="fa fa-check"></i><b>4.4.1</b> Unbiased estimators</a></li>
 <li class="chapter" data-level="4.4.2" data-path="time-series.html"><a href="time-series.html#minimum-variance-of-estimators"><i class="fa fa-check"></i><b>4.4.2</b> Minimum variance of estimators</a></li>
+<li class="chapter" data-level="4.4.3" data-path="time-series.html"><a href="time-series.html#inference"><i class="fa fa-check"></i><b>4.4.3</b> Inference</a></li>
 </ul></li>
+<li class="chapter" data-level="4.5" data-path="time-series.html"><a href="time-series.html#functional-forms"><i class="fa fa-check"></i><b>4.5</b> Functional forms</a></li>
+<li class="chapter" data-level="4.6" data-path="time-series.html"><a href="time-series.html#trends-in-time-series"><i class="fa fa-check"></i><b>4.6</b> Trends in time series</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>5</b> Spatial Econometrics</a>
 <ul>
@@ -341,6 +344,13 @@ Figure 4.1: Laged parameters
 <li>The variance of <span class="math inline">\(\hat{\beta_j}\)</span> conditional on X is</li>
 </ol>
 <p><span class="math display">\[Var(\hat{\beta_j}|X = \frac{\sigma^2}{SST_j(1-R_j^2)}), j=1,...,k\]</span></p>
+<p><span class="math inline">\(SST_j\)</span> is the total sum of squares of <span class="math inline">\(x_{tj}\)</span> and <span class="math inline">\(R^2_j\)</span> is the R-squared from the regression of <span class="math inline">\(x_j\)</span> on the other independent variables.</p>
+<ol start="2" style="list-style-type: decimal">
+<li><span class="math inline">\(\hat{\sigma^2}=\frac{SSR}{n-k-1}\)</span> is an unbiased estimator of <span class="math inline">\(\hat{\sigma^2}\)</span></li>
+</ol>
+<p>And then, the OLS estimators are the best linear unbiased estimators (BLUE) conditional on X.</p>
+<p>In order to make inference towards OLS estimators, section <a href="time-series.html#t6">4.4.3.1</a> explains the assumption required.</p>
+<p>All six assumptions make the Classical Linear Model assumptions for time series, were the OLS estimators are normally distributed, conditional to X. <span class="math inline">\(t\)</span> statistic has a <span class="math inline">\(t\)</span> distribution and each <span class="math inline">\(F\)</span> statistic has an <span class="math inline">\(F\)</span> distribution.</p>
 <div id="unbiased-estimators" class="section level3 hasAnchor" number="4.4.1">
 <h3><span class="header-section-number">4.4.1</span> Unbiased estimators<a href="time-series.html#unbiased-estimators" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p><span class="math display">\[E(\hat{\beta_j}) = \beta_j\]</span></p>
@@ -379,9 +389,57 @@ Figure 4.1: Laged parameters
 <p><span class="math display">\[Corr(u_t, u_s|X)=0, \text{ for all} t \neq s\]</span></p>
 <p>When this false, the errors are <key>autocorrelated</key>.</p>
 <p>The presence of <key>autocorrelation</key> in the errors means that if <span class="math inline">\(y\)</span> is unexpectedly high for this period, then it is likely to be above average in the next period too. In many applications, this is reasonable to assume.</p>
+</div>
+</div>
+<div id="inference" class="section level3 hasAnchor" number="4.4.3">
+<h3><span class="header-section-number">4.4.3</span> Inference<a href="time-series.html#inference" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="t6" class="section level4 hasAnchor" number="4.4.3.1">
+<h4><span class="header-section-number">4.4.3.1</span> Normality<a href="time-series.html#t6" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The errors are independent of X and are independently and identically distributed as Normal(0,<span class="math inline">\(\sigma^2\)</span>).</p>
+<p>This implies assumptions in sections <a href="time-series.html#t3">4.4.1.3</a>, <a href="time-series.html#t4">4.4.2.1</a> and <a href="time-series.html#t5">4.4.2.2</a>, but stronger.</p>
+</div>
+</div>
+</div>
+<div id="functional-forms" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Functional forms<a href="time-series.html#functional-forms" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Natural logarithms are often used in time series regressions with constant percentage effects.</p>
+<p>If the model is a log-log, then the coefficient can be interpreted as the elasticity of <span class="math inline">\(y\)</span> with respect to <span class="math inline">\(x\)</span>.</p>
+<p>Logartihms can be used in lag models. In a log-log, the <key>impact multiplier</key> <span class="math inline">\(\beta_0\)</span> is called <key>short-run elasticity</key>. The <key>cumulative effect</key> is sometimes called <key>long-run elasticity, LRP</key>, and measures the percentage increase in <span class="math inline">\(y\)</span> after <span class="math inline">\(k\)</span> periods, given a permanent increase of 1% in <span class="math inline">\(x\)</span>.</p>
+<p>When a lag of a variable is added to the model, we loose one observation. The lagged variables can be substantially correlated, creating a multicollinearity problem that makes difficult to estimate the effect of each lag. The joint significance given by the <span class="math inline">\(F\)</span> statistic tells if the variable is significant. However, it doesn’t point out if it is the contemporaneous, a lagged one or all. Regressing the model using the LRP makes possible to estimate the standard error of the LRP estimate and determine if it is statistically different from zero, eventhough none of the coefficients is individually significant (refer to <span class="citation">Wooldridge (<a href="#ref-wooldridge1996introductory">2016</a>)</span>, page 347).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="time-series.html#cb2-1" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;./03-time-ser/LRP.png&quot;</span>)</span></code></pre></div>
+<div class="figure"><span style="display:block;" id="fig:LRP"></span>
+<img src="03-time-ser/LRP.png" alt="LRP estimation, example" width="350" />
+<p class="caption">
+Figure 4.2: LRP estimation, example
+</p>
+</div>
+<p>Indexed variables are helpful in time series analysis, as in allows to make interpretations about magnitudes. CPI is an example. For the base year, the CPI takes the value of 1, as it can be measured as the division between the year value and the base value (in this case, it is the same). Variables like price indexes are useful to turn nominal variables (includes inflation. Changes in nominal variables are due to changes in prices and productivity) into real variables (inflation not included. Changes here are due to productivity only).</p>
+<p>Remeber: The significance of the coefficients can be interpreted using the standard error. If the coefficient’s absolute value is greater than two times the standard error, it is significant</p>
+</div>
+<div id="trends-in-time-series" class="section level2 hasAnchor" number="4.6">
+<h2><span class="header-section-number">4.6</span> Trends in time series<a href="time-series.html#trends-in-time-series" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Economic series like population have the tendency of growing over time. Ignoring a <key>time trend</key> can lead to believe two series are related, in a direct or indirect way, when those changes can be uncorrelated. In many cases, two time series processes appear to be correlated only because they have the same trend over time.</p>
+<p>Trending behavior can be capture like:</p>
+<p><span class="math display">\[y_t = \alpha_0 + \alpha_1t + e_t, t=1,2...,\]</span></p>
+<ul>
+<li>where <span class="math inline">\(e_t\)</span> is an i.i.d sequence with expected value equal to zero and constant variance.</li>
+<li><span class="math inline">\(\alpha_1\)</span> is the change in <span class="math inline">\(y\)</span> from one period to the next one due to time. If positive, <span class="math inline">\(y_t\)</span> is growing over time and has an upward trend. If negative, the serie has a downward trend.</li>
+<li>The variance of <span class="math inline">\(y_t\)</span> is constant accross time.</li>
+</ul>
+<p>On the contrary of linear trends, an exponential trend is present when the time series have a constant growth over time. It can be captured using:</p>
+<p><span class="math display" id="eq:etrend">\[\begin{equation}
+log(y_t)=\beta_0+\beta_1t+e_t, t=1,2...
+\tag{4.2}
+\end{equation}\]</span></p>
+<ul>
+<li><span class="math inline">\(\beta_1\)</span> can be interpreted as the growth rate in <span class="math inline">\(y\)</span> from period <span class="math inline">\(t-1\)</span> to period <span class="math inline">\(t\)</span>, considering Equation <a href="time-series.html#eq:delty">(4.3)</a></li>
+</ul>
+<p><span class="math display" id="eq:delty">\[\begin{eqnarray}
+\Delta log(y_t) &amp;\approx&amp; \frac{y_t-y_{t-1}}{y_{t-1}} \\
+\Delta log(y_t) &amp;=&amp; \beta_1
+\tag{4.3}
+\end{eqnarray}\]</span></p>
 
-</div>
-</div>
 </div>
 </div>
 <h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>

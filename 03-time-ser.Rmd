@@ -6,7 +6,8 @@ Applying OLS method to time series requieres special attention.
 
 Often, these models violate the Gauss-Markov assumptions.
 
-We can no longer assume random sampling.
+We can no longer assume random sampling. According to Nicola Riguetti (@), a characteristic of time series is that past events have influence on future behaviors, meaning there is a dependency among the data points. Correlation in the data violates assumptions of traditional statistical approaches, that when are implemented in time series give mistrusted results. 
+Specific statistical methodologies have been developed to deal with data dependend on time.
 
 ## Characteristics
 
@@ -70,7 +71,7 @@ If assumptions explaned in sections \@ref(t1), \@ref(t2), \@ref(t3), \@ref(t4) a
 
 $$Var(\hat{\beta_j}|X = \frac{\sigma^2}{SST_j(1-R_j^2)}), j=1,...,k$$
 
-    $SST_j$ is the total sum of squares of $x_{tj}$ and $R^2_j$ is the R-squared from the regression of $x_j$ on the other independent variables.
+$SST_j$ is the total sum of squares of $x_{tj}$ and $R^2_j$ is the R-squared from the regression of $x_j$ on the other independent variables.
 
 2. $\hat{\sigma^2}=\frac{SSR}{n-k-1}$ is an unbiased estimator of $\hat{\sigma^2}$
 
@@ -151,9 +152,77 @@ Logartihms can be used in lag models. In a log-log, the `r ifelse(knitr::is_html
 When a lag of a variable is added to the model, we loose one observation. The lagged variables can be substantially correlated, creating a multicollinearity problem that makes difficult to estimate the effect of each lag. The joint significance given by the $F$ statistic tells if the variable is significant. However, it doesn't point out if it is the contemporaneous, a lagged one or all. Regressing the model using the LRP makes possible to estimate the standard error of the LRP estimate and determine if it is statistically different from zero, eventhough none of the coefficients is individually significant (refer to @wooldridge1996introductory, page 347).
 
 
-
 ```{r LRP, fig.cap='LRP estimation, example', fig.width=10}
 
 knitr::include_graphics("./03-time-ser/LRP.png")
 
 ```
+
+Indexed variables are helpful in time series analysis, as in allows to make interpretations about magnitudes. CPI is an example. For the base year, the CPI takes the value of 1, as it can be measured as the division between the year value and the base value (in this case, it is the same). Variables like price indexes are useful to turn nominal variables (includes inflation. Changes in nominal variables are due to changes in prices and productivity) into real variables (inflation not included. Changes here are due to productivity only).
+
+Remeber: The significance of the coefficients can be interpreted using the standard error. If the coefficient's absolute value is greater than two times the standard error, it is significant
+
+## Trends in time series
+
+### Linear trends
+
+Economic series like population have the tendency of growing over time. Ignoring a `r ifelse(knitr::is_html_output(), print("<key>time trend</key>"), print("\\key{time trend}"))` can lead to believe two series are related, in a direct or indirect way, when those changes can be uncorrelated. In many cases, two time series processes appear to be correlated only because they have the same trend over time. 
+
+Trending behavior can be capture like:
+
+$$y_t = \alpha_0 + \alpha_1t + e_t, t=1,2...,$$
+
+- where $e_t$ is an i.i.d sequence with expected value equal to zero and constant variance.
+- $\alpha_1$ is the change in $y$ from one period to the next one due to time. If positive, $y_t$ is growing over time and has an upward trend. If negative, the serie has a downward trend.
+- The variance of $y_t$ is constant accross time. 
+
+### Exponential trends
+
+
+On the contrary of linear trends, an exponential trend is present when the time series have a constant growth over time. It can be captured using:
+
+\begin{equation}
+log(y_t)=\beta_0+\beta_1t+e_t, t=1,2...
+(\#eq:etrend)
+\end{equation} 
+
+
+- $\beta_1$ can be interpreted as the growth rate in $y$ from period $t-1$ to period $t$, considering Equation \@ref(eq:delty)
+
+\begin{eqnarray}
+\Delta log(y_t) &\approx& \frac{y_t-y_{t-1}}{y_{t-1}} \\
+\Delta log(y_t) &=& \beta_1
+(\#eq:delty)
+\end{eqnarray}
+
+- $y$ grows about $\beta_1\times 100$ \% per year on average. 
+
+### Other trends
+
+More complicated trends can be modeled using other forms. The derivative of $y$ with respect to $t$ will show the approximate slope. 
+
+An increasing trend followed by a decreasing trend can be modeled like in Equation \@ref(eq:othery), were the trend shape depends on the coefficient values.
+
+\begin{eqnarray}
+y_t &=& \alpha_0 + \alpha_1t + \alpha_2t + e_t \\
+\frac{\Delta y_t}{\Delta t} &\approx& \alpha_1 + 2\alpha_2t
+(\#eq:othery)
+\end{eqnarray}
+
+
+### Regression analysis with trends
+
+The presence of trends do not necessarily violates the classical linear model assumptions discussed in sections \@ref(t1), \@ref(t2), \@ref(t3), \@ref(t4) \@ref(t5) and \@ref(t6). However, the unobserved trending factors affecting $y_t$ might also be correlated with the $x$ variables, creating the `r ifelse(knitr::is_html_output(), print("<key>spurious correlation problem</key>"), print("\\key{spurious correlation problem}"))` that can be solved later adding a time trend.
+
+A model that captures a time trend is displayed in Equation \@ref(eq:spur). Adding the trend is recognizing that $y$ may be growing or shrinking over time for reasons unrelated to the $x$`s.
+
+\begin{eqnarray}
+y_t &=& \beta_0 + \beta_1x_{t1} + \beta_2x_{t2} + \beta_3t + u_t
+(\#eq:spur)
+\end{eqnarray}
+
+The regression of a variable on $t$  tend to contain substantial serial correlation, making the standard errors  not reliable.
+
+In cases when $y$ exhibit both upward and downward trends, the robustnest of the coefficients of the $x$`s included can be seen adding a quadratic trend.
+
+Adding the trend as in Equation \@ref(eq:spur) is called `r ifelse(knitr::is_html_output(), print("<key>detrending</key>"), print("\\key{detrending}"))`. Including the trend, even it is not noticeable in $y$, captures the effects that other variables affected with the trend have.
