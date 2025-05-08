@@ -13,9 +13,92 @@ Specific statistical methodologies have been developed to deal with data depende
 
 In time series, there is temporal ordering. That means the past can affect the future, but not the other way round. 
 
-The observed data is only one possible outcome of the `r ifelse(knitr::is_html_output(), print("<key>stochastic process</key>"), print("\\key{stochastic process}"))`. These is also called *realizations* of the time series process. It is not possible to observe other value, since history cannot be changed. However, the existance of an `r ifelse(knitr::is_html_output(), print("<key>stochastic process</key>"), print("\\key{stochastic process}"))` suggest that if events had been different, a different *realization* would have been obtained. That is why time series can be think of as the outcome of random variables.
+The observed data is only one possible outcome of the `r ifelse(knitr::is_html_output(), print("<key>stochastic process</key>"), print("\\key{stochastic process}"))`. 
+These is also called *realizations* of the time series process. 
+It is not possible to observe other value, since history cannot be changed. However, the existance of an 
+`r ifelse(knitr::is_html_output(), print("<key>stochastic process</key>"), print("\\key{stochastic process}"))` 
+suggest that if events had been different, a different *realization* would have been obtained. 
+That is why time series can be thought of as the outcome of random variables.
 
-All possible realizations of an `r ifelse(knitr::is_html_output(), print("<key>stochastic process</key>"), print("\\key{stochastic process}"))` are the total population in cross-sectional data, while the sample size is the number of periods over the observed variables.
+All possible realizations of an `r ifelse(knitr::is_html_output(), print("<key>stochastic process</key>"), print("\\key{stochastic process}"))` 
+are the total population in cross-sectional data, 
+while the sample size is the number of periods over the observed variables. 
+
+When a time series is `r ifelse(knitr::is_html_output(), print("<key>deterministic</key>"), print("\\key{deterministic}"))`, it has no probabilistic part, according to Nicola Righetti.
+It means it is possible to predict its exact future value. On the other hand, `r ifelse(knitr::is_html_output(), print("<key>non-deterministic</key>"), print("\\key{non-deterministic}"))` 
+processes include some randomness. To predict such time series, probabilistic terms are needed. However, there is always an unpredictable component.
+
+
+## Time series steps
+
+Based on https://nicolarighetti.github.io/Time-Series-Analysis-With-R/plot-time-series.html, Chapter 6.
+
+1. Plot the data. This allows you to visualize and explore it.
+
+
+```{r}
+
+data("AirPassengers")
+
+plot.ts(AirPassengers)
+
+library(xts)
+
+AirPassengers_xts <- as.xts(AirPassengers)
+
+plot.xts(AirPassengers_xts)
+
+```
+
+2. Decompose the time series in trend, cycle, seasonality and the error.
+
+## In R
+
+It is important to know the periodicity of the data.
+
+```{r}
+
+periodicity(AirPassengers_xts)
+
+```
+
+Data can be re-sampled from a higher to a lower frequency.
+
+```{r}
+
+to.period(AirPassengers_xts, period="years")
+
+
+```
+
+### Decomposition:
+
+A deterministic trend is also called trend stationary. This function increases or decreases in function of time. 
+Can be linear or non-linear.
+
+Stochastic trends show changes of direction in unpredictable times. 
+They are called difference stationary. 
+An example is a random walk process, where the current values are combinations of 
+the observations in the past. 
+That results is a discernible pattern that is not exactly predictable.
+
+$$x_t = x_{t-1}+ e_t$$
+
+The seasonal component of a time series occurs at a fixed time period, as a month. 
+The frequency is known. They can look similar to cyclic variations, 
+but seasonality is repeated in the same period of time, i.e. every monday, every July, 
+while the cycles' peaks appear in irregular frequencies.
+
+The residual is the random part of the time series. Should seem to be the realization of 
+random variables from a probability distribution.
+
+```{r}
+decompose(AirPassengers)
+```
+
+Decomposition methods try to separate the components. 
+The additive model is useful when the seasonal component seems constant over time.
+The multiplicative model is useful when the seasonality seems to increase with time.
 
 
 ## Static models
